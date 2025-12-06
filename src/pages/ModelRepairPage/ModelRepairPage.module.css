@@ -1,0 +1,324 @@
+.pageWrapper {
+  width: 100%;
+  padding-bottom: 80px;
+  background-color: var(--Background_Main);
+  color: var(--Text_Primary);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+.spinner {
+  animation: spin 1s linear infinite;
+  color: var(--Primary_Color);
+}
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* --- Header --- */
+.modelHeader {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background-color: var(--Surface_Card);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: var(--Shadow_Sm);
+  margin-bottom: 30px;
+  border: 1px solid var(--Border_Color);
+}
+
+.modelImage {
+  width: 60px;
+  height: auto;
+  object-fit: contain;
+}
+.modelTitle {
+  font-family: var(--Font_Heading);
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--Text_Primary);
+}
+
+/* --- Layout --- */
+.layoutGrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  align-items: start;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--Text_Secondary);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+/* --- Services Grid --- */
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.serviceCard {
+  background-color: var(--Surface_Card);
+  border: 1px solid var(--Border_Color);
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 160px;
+}
+
+.serviceCard:hover {
+  box-shadow: var(--Shadow_Md);
+  border-color: var(--Primary_Color);
+}
+
+.serviceCard.selected {
+  border-color: var(--Primary_Color);
+  background-color: rgba(37, 99, 235, 0.04);
+}
+
+/* Discount Badge */
+.discountBadge {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  background-color: #10b981;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 0 12px 0 8px;
+  z-index: 1;
+}
+
+.cardBody {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.iconBox {
+  color: var(--Primary_Color);
+  flex-shrink: 0;
+  padding-top: 4px;
+}
+
+.details {
+  flex: 1;
+}
+
+.serviceTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--Text_Primary);
+  margin-bottom: 6px;
+}
+
+.serviceDesc {
+  font-size: 13px;
+  color: var(--Text_Secondary);
+  line-height: 1.4;
+  margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.priceRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.price {
+  font-weight: 800;
+  color: var(--Text_Primary);
+  font-size: 15px;
+}
+
+.originalPrice {
+  font-size: 12px;
+  color: var(--Text_Muted);
+  text-decoration: line-through;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto;
+}
+
+.addBtn {
+  background-color: transparent;
+  color: var(--Primary_Color);
+  border: 1px solid var(--Primary_Color);
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.addBtn:hover {
+  background-color: var(--Primary_Color);
+  color: white;
+}
+
+.addedBtn {
+  background-color: #10b981;
+  border-color: #10b981;
+  color: white;
+}
+.addedBtn:hover {
+  background-color: #059669;
+}
+
+/* --- Right Column (Sticky Cart) --- */
+.rightColumn {
+  position: sticky;
+  top: 100px;
+}
+
+.priceCard {
+  background-color: var(--Surface_Card);
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: var(--Shadow_Sm);
+  border: 1px solid var(--Border_Color);
+}
+
+.priceTitle {
+  font-size: 18px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--Border_Color);
+  padding-bottom: 10px;
+  color: var(--Text_Primary);
+}
+
+.cartItems {
+  margin-bottom: 20px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.cartRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: var(--Text_Secondary);
+  margin-bottom: 10px;
+  border-bottom: 1px dashed var(--Border_Color);
+  padding-bottom: 8px;
+}
+.cartRow:last-child {
+  border-bottom: none;
+}
+
+.emptyCartMsg {
+  text-align: center;
+  font-size: 14px;
+  color: var(--Text_Muted);
+  padding: 20px 0;
+}
+
+.billRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 24px;
+  border-top: 1px solid var(--Border_Color);
+  padding-top: 15px;
+  color: var(--Text_Primary);
+}
+
+.bookRepairBtn {
+  width: 100%;
+  background-color: var(--Primary_Color);
+  color: white;
+  padding: 14px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.bookRepairBtn:hover {
+  background-color: var(--Primary_Hover);
+}
+
+.bookRepairBtn:disabled {
+  background-color: var(--Text_Muted);
+  cursor: not-allowed;
+}
+
+.quoteNote {
+  font-size: 11px;
+  color: var(--Text_Muted);
+  margin-top: 12px;
+  text-align: center;
+}
+
+/* --- Responsive --- */
+@media (max-width: 900px) {
+  .layoutGrid {
+    grid-template-columns: 1fr;
+  }
+  .servicesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Mobile Cart Fixed Bottom */
+  .rightColumn {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    top: auto;
+    z-index: 100;
+    padding: 0;
+  }
+  .priceCard {
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.15);
+    border-bottom: none;
+  }
+  .cartItems,
+  .priceTitle,
+  .quoteNote {
+    display: none; /* Simplified cart on mobile */
+  }
+  .pageWrapper {
+    padding-bottom: 180px; /* Space for fixed cart */
+  }
+}

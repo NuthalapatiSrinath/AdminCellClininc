@@ -1,0 +1,206 @@
+.footer {
+  /* Use variable for background */
+  background-color: var(--Footer_Bg);
+  color: var(--Footer_Text);
+  padding-top: 60px;
+  width: 100%;
+  font-family: var(--Font_Family);
+  transition: background-color 0.3s ease;
+}
+
+.container {
+  max-width: 1280px; /* Increased width slightly to fit 5 cols comfortably */
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Grid Layout - Updated to 5 Columns */
+.grid {
+  display: grid;
+  /* Brand | Quick Links | Support | Services | Contact */
+  grid-template-columns: 1.5fr 0.8fr 1fr 1fr 1.2fr;
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+/* --- Branding --- */
+.logoRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.logoImage {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.brandName {
+  color: var(--Footer_Heading);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.tagline {
+  line-height: 1.6;
+  margin-bottom: 24px;
+  font-size: 14px; /* Slightly smaller to fit */
+  max-width: 300px;
+  color: var(--Footer_Text);
+}
+
+/* --- Social Icons --- */
+.socialRow {
+  display: flex;
+  gap: 12px;
+}
+
+.socialIcon {
+  width: 36px; /* Slightly smaller icons */
+  height: 36px;
+  background-color: var(--Footer_Icon_Bg);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--Footer_Heading);
+  transition: all 0.3s ease;
+}
+
+.socialIcon:hover {
+  background-color: var(--Primary_Color);
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* --- Links --- */
+.heading {
+  color: var(--Footer_Heading);
+  font-size: 16px; /* Adjusted size */
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list li {
+  margin-bottom: 10px;
+}
+
+.list a {
+  color: var(--Footer_Text);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s;
+  display: block; /* Helps click area */
+}
+
+.list a:hover {
+  color: var(--Primary_Color);
+  transform: translateX(3px); /* Subtle hover movement */
+  transition: transform 0.2s ease, color 0.2s;
+}
+
+/* --- Contact --- */
+.contactItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 14px;
+  font-size: 14px;
+  color: var(--Footer_Text);
+}
+
+.contactItem a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.contactItem a:hover {
+  color: var(--Footer_Heading);
+  text-decoration: underline;
+}
+
+.icon {
+  color: var(--Primary_Color);
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+/* --- Copyright --- */
+.copyright {
+  border-top: 1px solid var(--Footer_Border);
+  text-align: center;
+  padding: 24px 0;
+  margin-top: 40px;
+  font-size: 13px;
+  color: var(--Footer_Text);
+}
+
+/* --- Responsive --- */
+
+/* Tablet: 3 Columns top, 2 bottom */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: 1fr 1fr 1fr;
+    row-gap: 40px;
+  }
+
+  .brandColumn {
+    grid-column: 1 / -1; /* Full width brand on tablet */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tagline {
+    max-width: 500px;
+  }
+}
+
+/* Mobile: Stack everything */
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr 1fr; /* 2 columns for links */
+    gap: 30px;
+  }
+
+  .contactColumn {
+    grid-column: 1 / -1; /* Full width contact */
+  }
+
+  .heading {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr; /* Single column on very small screens */
+    text-align: center;
+  }
+
+  .brandColumn,
+  .contactItem {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .socialRow {
+    justify-content: center;
+  }
+
+  .list a:hover {
+    transform: none; /* Disable shift on touch */
+  }
+}

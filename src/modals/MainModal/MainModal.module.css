@@ -1,0 +1,31 @@
+.MainModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  /* dim background */
+  display: flex;
+  justify-content: flex-end;
+  /* 👈 push modal to right side */
+  align-items: stretch;
+  /* full height */
+  z-index: 2000;
+  overflow: hidden;
+  /* disable scroll inside overlay */
+}
+
+/* Right-side drawer modal */
+.drawer {
+  /* adjust drawer width */
+  max-width: 90%;
+  height: 100%;
+
+  overflow-y: auto;
+  /* if content is taller than viewport */
+
+  position: relative;
+  border-radius: 0;
+  /* flat edge against right */
+}

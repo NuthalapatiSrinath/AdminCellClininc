@@ -1,0 +1,48 @@
+/* Global Styles */
+
+/* --- WebKit Scrollbar (Chrome, Safari, Edge) --- */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Track (path) */
+::-webkit-scrollbar-track {
+  /* Automatically switches between Light (#f8fafc) and Dark (#1e293b) */
+  background: var(--Background_Alt);
+  border-radius: 10px;
+}
+
+/* Thumb (draggable part) */
+::-webkit-scrollbar-thumb {
+  /* Uses your Brand Blue */
+  background: var(--Primary_Color);
+  border-radius: 10px;
+  /* Creates a nice padding effect around the thumb */
+  border: 2px solid var(--Background_Alt);
+}
+
+/* On hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--Primary_Hover);
+}
+
+/* --- Firefox Scrollbar Styling --- */
+* {
+  scrollbar-width: thin;
+  /* Thumb Color | Track Color */
+  scrollbar-color: var(--Primary_Color) var(--Background_Alt);
+}
+
+/* --- Main Container --- */
+.Main {
+  width: 100%;
+  /* overflow-y: auto; <--- Kept removed to ensure Sticky Header works */
+}
+
+/* Remove number input arrows in WebKit browsers */
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

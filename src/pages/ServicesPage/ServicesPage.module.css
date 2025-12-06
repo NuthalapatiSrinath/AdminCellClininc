@@ -1,0 +1,72 @@
+.pageWrapper {
+  width: 100%;
+  padding-bottom: 80px;
+  background-color: var(--Background_Main);
+  color: var(--Text_Primary);
+  min-height: 100vh;
+  transition: background-color 0.3s ease;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* --- Header --- */
+.header {
+  background-color: var(--Background_Alt);
+  padding: 40px 0;
+  border-bottom: 1px solid var(--Border_Color);
+  margin-bottom: 0; /* Removed margin to let sections control spacing */
+}
+
+.pageTitle {
+  font-family: var(--Font_Heading);
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--Text_Primary);
+  margin-bottom: 8px;
+}
+
+.breadcrumbs {
+  font-family: var(--Font_Body);
+  color: var(--Text_Secondary);
+  font-size: 14px;
+}
+
+.breadcrumbs a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s;
+}
+
+.breadcrumbs a:hover {
+  color: var(--Primary_Color);
+  text-decoration: underline;
+}
+
+/* --- Sections Stack --- */
+.sectionsStack {
+  display: flex;
+  flex-direction: column;
+  /* No gap needed here if individual components have their own padding, 
+     but adding a small separator helps visuals */
+  gap: 0;
+}
+
+.sectionBlock {
+  /* Optional: Add border between sections if desired */
+  /* border-bottom: 1px dashed var(--Border_Color); */
+}
+
+.sectionBlock:last-child {
+  border-bottom: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .pageTitle {
+    font-size: 28px;
+  }
+}

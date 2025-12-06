@@ -1,0 +1,280 @@
+.pageWrapper {
+  width: 100%;
+  padding-bottom: 80px;
+  background-color: var(--Background_Main);
+  color: var(--Text_Primary);
+  transition: background-color 0.3s ease;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 24px;
+}
+
+/* --- Header --- */
+.header {
+  margin-bottom: 40px;
+}
+
+.pageTitle {
+  font-family: var(--Font_Heading);
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: var(--Text_Primary);
+}
+
+.breadcrumbs {
+  font-family: var(--Font_Body);
+  color: var(--Text_Muted);
+  font-size: 14px;
+}
+.breadcrumbs a {
+  text-decoration: none;
+  color: inherit;
+}
+.breadcrumbs a:hover {
+  color: var(--Primary_Color);
+}
+
+/* --- Model Section --- */
+.modelSection {
+  margin-bottom: 60px;
+}
+
+.modelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modelHeader h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--Text_Primary);
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  background: var(--Surface_Card);
+  border: 1px solid var(--Border_Color);
+  padding: 8px 12px;
+  border-radius: 8px;
+  width: 250px;
+}
+.searchBox input {
+  border: none;
+  outline: none;
+  margin-left: 8px;
+  width: 100%;
+  background: transparent;
+  color: var(--Text_Primary);
+}
+.searchIcon {
+  color: var(--Text_Muted);
+}
+
+.modelGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px;
+}
+
+.modelCard {
+  background: var(--Surface_Card);
+  border: 1px solid var(--Border_Color);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.modelImg {
+  width: 80px;
+  height: auto;
+  margin-bottom: 15px;
+  object-fit: contain;
+}
+.modelCard p {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--Text_Primary);
+  margin: 0;
+}
+
+/* --- Brand Hero --- */
+.brandHero {
+  text-align: center;
+  margin-bottom: 60px;
+  padding: 40px;
+  background-color: var(--Background_Alt);
+  border-radius: 16px;
+  border: 1px solid var(--Border_Color);
+}
+.brandHero h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+.brandHero p {
+  color: var(--Text_Secondary);
+  font-size: 15px;
+}
+
+/* --- Why Us & Services Common --- */
+.whyUs,
+.servicesList {
+  text-align: center;
+  margin-bottom: 80px;
+}
+.servicesHeading {
+  font-size: 24px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.redLine {
+  width: 100%;
+  height: 1px;
+  background: var(--Border_Color);
+  margin: 15px 0 40px;
+  position: relative;
+}
+.redLine::after {
+  content: "";
+  position: absolute;
+  width: 100px;
+  height: 3px;
+  background: var(--Primary_Color);
+  left: 50%;
+  transform: translateX(-50%);
+  top: -1px;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  text-align: center;
+}
+.statItem h4 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.statItem p {
+  font-size: 13px;
+  color: var(--Text_Secondary);
+}
+
+/* --- SERVICES GRID (Horizontal Layout) --- */
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 Columns side-by-side */
+  gap: 30px;
+  text-align: left;
+}
+
+.serviceCard {
+  display: flex;
+  align-items: flex-start; /* Align top */
+  gap: 24px;
+  background: var(--Surface_Card);
+  padding: 30px;
+  border-radius: 8px; /* Sharper corners like image */
+  box-shadow: var(--Shadow_Sm);
+  border: 1px solid var(--Border_Color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  min-height: 130px;
+}
+
+/* Icon Wrapper */
+.serviceIcon {
+  flex-shrink: 0;
+  margin-top: 4px; /* Slight adjustment to align with title */
+}
+
+.serviceText {
+  flex: 1;
+}
+
+.serviceText h4 {
+  font-family: var(--Font_Heading);
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--Text_Primary);
+}
+
+.serviceText p {
+  font-family: var(--Font_Body);
+  font-size: 14px;
+  color: var(--Text_Secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* --- Responsive --- */
+@media (max-width: 900px) {
+  .servicesGrid {
+    grid-template-columns: 1fr;
+  } /* Stack on mobile */
+  .statsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 480px) {
+  .modelGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+} /* --- Brand Hero (Updated) --- */
+.brandHero {
+  text-align: center;
+  margin-bottom: 60px;
+  padding: 40px;
+  background-color: var(--Background_Alt);
+  border-radius: 16px;
+  border: 1px solid var(--Border_Color);
+}
+
+.brandHero h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  color: var(--Text_Primary);
+  font-weight: 800;
+}
+
+.brandHero p {
+  color: var(--Text_Secondary);
+  font-size: 15px;
+  line-height: 1.8; /* Better readability for long text */
+  max-width: 900px; /* Allow wider text block */
+  margin: 0 auto;
+  text-align: justify; /* Looks cleaner for blocks */
+  text-align-last: center; /* Centers the last line */
+}
+
+/* --- Services Heading Update --- */
+/* Match the "Get The Following Issues Fixed..." text */
+.servicesHeading {
+  font-family: var(--Font_Heading);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--Text_Primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  max-width: 800px;
+  margin: 0 auto 10px auto;
+}

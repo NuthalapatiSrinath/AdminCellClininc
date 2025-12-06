@@ -1,0 +1,261 @@
+.hero {
+  position: relative;
+  width: 100%;
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  /* Uses the variable from index.css for theme switching */
+  background: var(--Hero_Gradient);
+  overflow: hidden;
+  padding: 40px 0;
+  transition: background 0.3s ease;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 40px;
+}
+
+/* --- Left Column --- */
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 10;
+}
+
+.tagline {
+  color: var(--Primary_Color);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.title {
+  font-size: 56px;
+  line-height: 1.1;
+  font-weight: 800;
+  color: var(--Text_Primary); /* Adapts to dark mode */
+  font-family: var(--Font_Heading);
+}
+
+.description {
+  color: var(--Text_Secondary);
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 480px;
+}
+
+/* Actions Row */
+.actionRow {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.bookBtn {
+  background: linear-gradient(90deg, #3b6db5 0%, #5a8dd9 100%);
+  color: white;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(59, 109, 181, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-transform: uppercase;
+}
+
+.bookBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(59, 109, 181, 0.4);
+}
+
+.socialIcons {
+  display: flex;
+  gap: 12px;
+}
+
+.iconLink {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #9ca3af;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.iconLink:hover {
+  background-color: var(--Secondary_Color);
+}
+
+/* Dots */
+.dots {
+  display: flex;
+  gap: 8px;
+  margin-top: 40px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #d1d5db;
+  cursor: pointer;
+}
+
+.dot.active {
+  background-color: #3b82f6;
+}
+
+/* --- Right Column (Image Stack) --- */
+.imageWrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 500px;
+}
+
+/* The dark cards behind the watch */
+.cardBack,
+.cardMiddle {
+  position: absolute;
+  width: 400px;
+  height: 320px;
+  border-radius: 24px;
+  background-color: #0f172a; /* Keeping these dark as per design */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.cardBack {
+  transform: rotate(-8deg) translateX(-20px);
+  z-index: 1;
+  opacity: 0.9;
+}
+
+.cardMiddle {
+  transform: rotate(5deg);
+  z-index: 2;
+  background-color: #162032;
+}
+
+.watchImage {
+  position: relative;
+  z-index: 3;
+  width: auto;
+  height: 450px;
+  object-fit: contain;
+  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.4));
+}
+
+/* --- Navigation Arrows --- */
+.arrows {
+  position: absolute;
+  bottom: 40px;
+  right: 60px;
+  display: flex;
+  gap: 16px;
+}
+
+.arrowBtn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid #d1d5db;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--Text_Secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.arrowBtn:hover {
+  border-color: var(--Primary_Color);
+  color: var(--Primary_Color);
+  background-color: rgba(37, 99, 235, 0.05);
+}
+
+/* --- MOBILE RESPONSIVE ORDERING --- */
+@media (max-width: 900px) {
+  .container {
+    /* Use Flexbox to enable ordering */
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 30px;
+  }
+
+  .hero {
+    height: auto;
+    padding-bottom: 60px;
+    padding-top: 100px; /* Extra top padding for nav */
+  }
+
+  /* 1. Text Content */
+  .content {
+    order: 1;
+    align-items: center;
+    width: 100%;
+  }
+
+  .title {
+    font-size: 36px;
+  }
+
+  /* 2. Buttons/Socials (Action Row) */
+  .actionRow {
+    order: 2;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  /* 3. Navigation (Dots & Arrows) */
+  .dots {
+    order: 3;
+    margin-top: 10px;
+    justify-content: center;
+  }
+
+  .arrows {
+    position: static; /* Remove absolute positioning */
+    order: 4;
+    margin-top: 10px;
+    justify-content: center;
+    width: 100%;
+  }
+
+  /* 4. Image (Last) */
+  .imageWrapper {
+    order: 5;
+    height: 270px;
+    width: 100%;
+    /* margin-top: 30px; */
+  }
+
+  /* Resize image elements for mobile */
+  .cardBack,
+  .cardMiddle {
+    width: 280px;
+    height: 220px;
+  }
+
+  .watchImage {
+    height: 300px;
+  }
+}

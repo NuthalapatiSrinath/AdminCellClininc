@@ -1,0 +1,231 @@
+.section {
+  width: 100%;
+  padding: 100px 0;
+  position: relative;
+  overflow: hidden;
+
+  /* --- Super Linear Background (Light Mode) --- */
+  /* A subtle 3-color gradient for a premium feel */
+  background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 40%, #fff1f2 100%);
+
+  transition: background 0.3s ease;
+}
+
+/* Dark Mode Section Background Override */
+:global([data-theme="dark"]) .section {
+  background: linear-gradient(135deg, #0f172a 0%, #020617 50%, #1e1b4b 100%);
+}
+
+/* --- Glowing Blobs (Kept for extra depth) --- */
+.bgBlob1 {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(
+    circle,
+    rgba(37, 99, 235, 0.08) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+.bgBlob2 {
+  position: absolute;
+  bottom: -10%;
+  right: -10%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(
+    circle,
+    rgba(249, 115, 22, 0.05) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Dark mode adjustment for blobs */
+:global([data-theme="dark"]) .bgBlob1 {
+  background: radial-gradient(
+    circle,
+    rgba(37, 99, 235, 0.15) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* --- Header --- */
+.header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.title {
+  font-family: var(--Font_Heading);
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--Text_Primary);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.subtitle {
+  font-family: var(--Font_Body);
+  color: var(--Text_Secondary);
+  font-size: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* --- Main Grid --- */
+.contentGrid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+/* --- Side Columns --- */
+.columnSide {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* --- CARD STYLES --- */
+.card {
+  background-color: var(--Surface_Card);
+  padding: 24px;
+  border-radius: 20px;
+
+  /* 4-Sided Super Shadow */
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.02); /* Subtle border for definition */
+
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Dark mode card style */
+:global([data-theme="dark"]) .card {
+  background-color: #1e293b;
+  /* Stronger shadow for dark mode visibility */
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  /* Enhanced hover shadow */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+  border-color: var(--Border_Color);
+}
+
+.iconBox {
+  background-color: #ecf4ff;
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--Primary_Color);
+  flex-shrink: 0;
+}
+
+:global([data-theme="dark"]) .iconBox {
+  background-color: rgba(37, 99, 235, 0.2);
+}
+
+.cardText h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--Text_Primary);
+  margin-bottom: 8px;
+}
+
+.cardText p {
+  font-size: 13px;
+  color: var(--Text_Secondary);
+  line-height: 1.5;
+}
+
+/* --- Center Image --- */
+.imageContainer {
+  position: relative;
+  width: 100%;
+  height: 450px;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2); /* Deep shadow for image */
+}
+
+.centerImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.imageOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 70%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+  .contentGrid {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+
+  .imageContainer {
+    order: -1;
+    height: 350px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .columnSide {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .columnSide {
+    grid-template-columns: 1fr;
+  }
+
+  .section {
+    padding: 60px 0;
+  }
+
+  .title {
+    font-size: 28px;
+  }
+}

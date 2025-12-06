@@ -1,0 +1,158 @@
+.section {
+  width: 100%;
+  padding: 80px 0;
+  background-color: var(--Background_Main);
+  position: relative;
+  overflow: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.heading {
+  font-family: var(--Font_Heading);
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--Text_Primary);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.subHeading {
+  font-family: var(--Font_Body);
+  font-size: 16px;
+  color: var(--Text_Secondary);
+  margin-bottom: 50px; /* More spacing */
+}
+
+/* --- Grid --- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+}
+
+.card {
+  background-color: var(--Surface_Card);
+  border-radius: 20px; /* Softer corners */
+  padding: 40px 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06); /* Soft shadow */
+  border: 1px solid transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  min-height: 260px;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.imageWrapper {
+  height: 120px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardImage {
+  max-height: 100%;
+  max-width: 80%;
+  object-fit: contain;
+  transition: transform 0.3s;
+}
+
+.card:hover .cardImage {
+  transform: scale(1.1);
+}
+
+.cardTitle {
+  font-family: var(--Font_Heading);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--Text_Primary);
+}
+
+/* --- Bottom Text & Modal Trigger --- */
+.bottomText {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+/* EXACT MATCH for "How to find my model number" link style */
+.helpLink {
+  background: none;
+  border: none;
+  color: var(--Text_Primary); /* Black text */
+  font-size: 16px;
+  font-weight: 700; /* Bold */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--Font_Heading);
+  position: relative;
+  padding-bottom: 4px; /* Space for underline */
+}
+
+/* The Thick Underline */
+.helpLink::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px; /* Thickness */
+  background-color: var(--Text_Primary); /* Black line */
+  transition: width 0.3s ease;
+}
+
+.helpLink:hover {
+  color: var(--Primary_Color); /* Optional: Change color on hover */
+}
+
+.helpLink:hover::after {
+  background-color: var(--Primary_Color); /* Line color change */
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .heading {
+    font-size: 24px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .card {
+    padding: 30px;
+    min-height: 220px;
+  }
+}

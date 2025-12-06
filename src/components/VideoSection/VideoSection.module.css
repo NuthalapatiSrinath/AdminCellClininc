@@ -1,0 +1,240 @@
+.section {
+  width: 100%;
+  padding: 60px 0;
+  /* background-color: var(--Background_Main); */
+  transition: background-color 0.3s ease;
+}
+
+.container {
+  max-width: 1200px; /* Video usually looks better slightly constrained */
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.videoWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: #000;
+  /* border-radius: 8px; */
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  group: hover;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* --- Center Controls --- */
+.centerControls {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  transition: opacity 0.3s ease;
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Skip Buttons */
+.skipBtn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, color 0.2s;
+}
+
+.skipBtn:hover {
+  transform: scale(1.1);
+  color: white;
+}
+
+.skipText {
+  position: absolute;
+  font-size: 10px;
+  font-weight: 700;
+  margin-top: 1px;
+}
+
+/* Play/Pause Button (Middle) */
+.mainPlayBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: white;
+  transition: transform 0.2s;
+}
+
+.mainPlayBtn:hover {
+  transform: scale(1.1);
+}
+
+.pauseBars {
+  display: flex;
+  gap: 6px;
+  height: 32px;
+}
+
+.pauseBars span {
+  width: 8px;
+  height: 100%;
+  background-color: white;
+  border-radius: 4px;
+}
+
+/* --- Bottom Bar --- */
+.bottomBar {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  background: rgba(20, 20, 20, 0.85); /* Dark semi-transparent */
+  backdrop-filter: blur(10px);
+  padding: 10px 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Controls */
+.controlBtn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.controlBtn:hover {
+  color: var(--Primary_Color);
+}
+
+/* Time */
+.timeDisplay {
+  color: white;
+  font-size: 13px;
+  font-family: monospace;
+  font-weight: 500;
+  min-width: 80px;
+}
+
+.totalTime {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Slider / Progress Bar */
+.progressBarContainer {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.rangeInput {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  background-image: linear-gradient(var(--Primary_Color), var(--Primary_Color));
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+/* Thumb Styling */
+.rangeInput::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5);
+  transition: transform 0.1s;
+}
+
+.rangeInput::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.rangeInput::-moz-range-thumb {
+  height: 12px;
+  width: 12px;
+  border: none;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+}
+
+/* Right Controls */
+.rightControls {
+  display: flex;
+  gap: 16px;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .section {
+    padding: 30px 0;
+  }
+
+  .bottomBar {
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    padding: 8px 12px;
+    gap: 10px;
+  }
+
+  .timeDisplay {
+    font-size: 11px;
+    min-width: 60px;
+  }
+
+  .rightControls {
+    gap: 10px;
+  }
+}
+/* Add this to src/components/VideoSection/VideoSection.module.css */
+
+.errorOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  gap: 12px;
+  z-index: 10;
+}
+
+.errorOverlay p {
+  font-family: var(--Font_Body);
+  font-size: 16px;
+  color: #e5e5e5;
+}

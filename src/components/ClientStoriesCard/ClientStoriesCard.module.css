@@ -1,0 +1,146 @@
+/* ---------- Base Styles (Desktop) ---------- */
+/* DO NOT CHANGE - Kept exactly as provided */
+.cardWrapper {
+  position: relative;
+  padding-left: 90px;
+  /* space for image outside card */
+  min-width: calc(320px + 90px);
+  max-width: calc(360px + 90px);
+  flex-shrink: 0;
+}
+
+.card {
+  position: relative;
+  overflow: visible;
+  background: white;
+  border-radius: 18px;
+  padding: 24px 16px 24px 80px;
+  /* room for avatar */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.06);
+  margin-top: 5px;
+  height: 210px;
+  width: 370px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+}
+
+.imageWrapper {
+  position: absolute;
+  left: -70px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 5px solid white;
+  background-color: white;
+  z-index: 0;
+}
+
+.profileImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.content {
+  flex: 1;
+}
+
+.stars {
+  font-family: "Roboto Serif", serif;
+  font-size: 24px;
+  color: #cece08;
+  margin-bottom: 2px;
+}
+
+.text {
+  font-family: "Roboto Serif", serif;
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 27px;
+  color: rgba(0, 0, 0, 0.45);
+  margin-bottom: 16px;
+}
+
+.name {
+  font-family: "Roboto Serif", serif;
+  font-size: 21px;
+  font-weight: 400;
+  line-height: 25px;
+  color: #4070b1;
+}
+
+/* ---------- Mobile Version (Neat & Responsive) ---------- */
+@media (max-width: 768px) {
+  .cardWrapper {
+    /* Adjusted spacing for mobile */
+    padding-left: 50px;
+    min-width: auto;
+    max-width: none;
+    /* Set a fixed width suitable for mobile scrolling */
+    width: 85vw;
+  }
+
+  .card {
+    width: 100%;
+    height: auto; /* Allow height to grow with text */
+    min-height: 150px;
+    /* Reduced left padding to bring text closer to image but still clear it */
+    padding: 20px 20px 20px 55px;
+    border-radius: 16px;
+  }
+
+  .imageWrapper {
+    /* Smaller image for mobile */
+    width: 90px;
+    height: 90px;
+    /* Perfect positioning: half width to hang off edge */
+    left: -45px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 4px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Added subtle shadow for depth */
+  }
+
+  .stars {
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+
+  .text {
+    font-size: 15px; /* Readable size */
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .name {
+    font-size: 17px;
+    line-height: 1.3;
+    font-weight: 600; /* Slightly bolder for mobile legibility */
+  }
+}
+
+/* ---------- Small Mobile (Extra Compact) ---------- */
+@media (max-width: 380px) {
+  .cardWrapper {
+    padding-left: 45px;
+    width: 300px;
+  }
+
+  .card {
+    padding: 16px 16px 16px 50px;
+  }
+
+  .imageWrapper {
+    width: 80px;
+    height: 80px;
+    left: -40px;
+  }
+
+  .text {
+    font-size: 14px;
+  }
+}

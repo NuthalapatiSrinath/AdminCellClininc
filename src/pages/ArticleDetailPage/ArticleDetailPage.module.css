@@ -1,0 +1,183 @@
+.pageWrapper {
+  width: 100%;
+  padding-bottom: 80px;
+  background-color: var(--Background_Main);
+  transition: background-color 0.3s ease;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.notFound {
+  text-align: center;
+  padding: 100px;
+  font-size: 24px;
+  color: var(--Text_Primary);
+  font-family: var(--Font_Heading);
+}
+
+/* --- Header --- */
+.header {
+  background-color: var(--Background_Alt);
+  padding: 40px 0;
+  margin-bottom: 60px;
+  border-bottom: 1px solid var(--Border_Color);
+  transition: background-color 0.3s ease;
+}
+
+.pageTitle {
+  font-family: var(--Font_Heading);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--Text_Primary);
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.breadcrumbs {
+  font-family: var(--Font_Body);
+  color: var(--Text_Muted);
+  font-size: 14px;
+}
+
+.breadcrumbs a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s;
+}
+
+.breadcrumbs a:hover {
+  color: var(--Primary_Color);
+  text-decoration: underline;
+}
+
+/* --- Layout Grid --- */
+.layoutGrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* 2/3 Content, 1/3 Sidebar */
+  gap: 40px;
+  position: relative;
+  align-items: start; /* Ensures sticky works */
+}
+
+/* --- Main Content --- */
+.mainContent {
+  width: 100%;
+}
+
+.heroImageWrapper {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  box-shadow: var(--Shadow_Md);
+  background-color: var(--Background_Alt);
+}
+
+.heroImage {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.articleBody {
+  font-family: var(--Font_Body);
+}
+
+.contentHeading {
+  font-family: var(--Font_Heading);
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--Text_Primary);
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+.contentSubHeading {
+  font-family: var(--Font_Heading);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(
+    --Text_Primary
+  ); /* Slightly lighter black in light mode? Text_Primary is safe */
+  margin-top: 24px;
+  margin-bottom: 10px;
+}
+
+.contentParagraph {
+  font-size: 16px;
+  color: var(--Text_Secondary);
+  line-height: 1.8;
+  margin-bottom: 16px;
+  text-align: justify;
+}
+
+/* --- Sidebar --- */
+.sidebar {
+  min-width: 0;
+}
+
+.sidebarCard {
+  background-color: var(--Surface_Card);
+  border: 1px solid var(--Border_Color);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--Shadow_Sm);
+
+  /* STICKY MAGIC */
+  position: -webkit-sticky;
+  position: sticky;
+  top: 100px;
+}
+
+.sidebarTitle {
+  font-family: var(--Font_Heading);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--Text_Secondary);
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--Border_Color);
+  padding-bottom: 10px;
+}
+
+.sidebarList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sidebarLink {
+  font-family: var(--Font_Body);
+  text-decoration: none;
+  font-size: 15px;
+  color: var(--Text_Secondary);
+  line-height: 1.5;
+  transition: color 0.2s, border-color 0.2s;
+  border-bottom: 1px solid var(--Border_Color);
+  padding-bottom: 12px;
+  display: block;
+}
+
+.sidebarLink:last-child {
+  border-bottom: none;
+}
+
+.sidebarLink:hover {
+  color: var(--Primary_Color);
+  border-color: var(--Primary_Color);
+}
+
+/* --- Responsive --- */
+@media (max-width: 900px) {
+  .layoutGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebarCard {
+    position: static; /* Disable sticky on mobile */
+    margin-top: 40px;
+  }
+}

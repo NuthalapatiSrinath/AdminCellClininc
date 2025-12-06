@@ -1,0 +1,132 @@
+.pageWrapper {
+  width: 100%;
+  padding-bottom: 80px;
+  background-color: var(--Background_Main);
+  color: var(--Text_Primary);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.title {
+  font-family: var(--Font_Heading);
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: var(--Text_Primary);
+}
+
+.subtitle {
+  font-family: var(--Font_Body);
+  color: var(--Text_Secondary);
+  font-size: 15px;
+}
+
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.checkItem {
+  display: flex;
+  align-items: center;
+  background: var(--Surface_Card);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid var(--Border_Color);
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.checkItem:hover {
+  border-color: var(--Primary_Color);
+  transform: translateX(5px);
+}
+
+.checkbox {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--Text_Muted);
+  border-radius: 50%;
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.checkbox.checked {
+  background-color: var(--Success_Color);
+  border-color: var(--Success_Color);
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.iconBox {
+  width: 48px;
+  height: 48px;
+  background-color: var(--Background_Alt);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--Primary_Color);
+  flex-shrink: 0;
+}
+
+.text h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--Text_Primary);
+}
+
+.text p {
+  font-size: 13px;
+  color: var(--Text_Secondary);
+  line-height: 1.4;
+}
+
+.footer {
+  margin-top: 40px;
+}
+
+.proceedBtn {
+  width: 100%;
+  background-color: var(--Primary_Color);
+  color: white;
+  padding: 16px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s, opacity 0.3s;
+}
+
+.proceedBtn:disabled {
+  background-color: var(--Text_Muted);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.proceedBtn:not(:disabled):hover {
+  background-color: var(--Primary_Hover);
+}

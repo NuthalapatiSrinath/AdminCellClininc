@@ -1,0 +1,177 @@
+/* --- Fonts --- */
+/* Importing Manrope for the entire project */
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap");
+
+:root {
+  /* --- Typography Variables --- */
+  /* Applying Manrope to all font categories */
+  --Font_Family: "Manrope", sans-serif; /* Global Fallback */
+  --Font_Heading: "Manrope", sans-serif;
+  --Font_Body: "Manrope", sans-serif;
+  --Font_Brand: "Manrope", sans-serif;
+
+  /* --- Brand Colors --- */
+  /* Blue from designs */
+  --Primary_Color: #2563eb;
+  --Primary_Hover: #1d4ed8;
+
+  /* Orange from CTA */
+  --Secondary_Color: #f97316;
+  --Secondary_Hover: #ea580c;
+
+  /* --- LIGHT MODE (Default) --- */
+  --Background_Main: #ffffff;
+  --Background_Alt: #f8fafc;
+  --Surface_Card: #ffffff;
+  --Border_Color: #e2e8f0;
+
+  /* Hero Gradient (Light Mode) */
+  --Hero_Gradient: linear-gradient(135deg, #fdf4ff 0%, #f0f9ff 100%);
+
+  /* Text Colors */
+  --Text_Primary: #111827;
+  --Text_Secondary: #4b5563;
+  --Text_Muted: #9ca3af;
+  --Text_Inverse: #ffffff;
+
+  /* Footer Specific (Light Mode) */
+  --Footer_Bg: #1c1e21;
+  --Footer_Text: #6c6d70;
+  --Footer_Heading: #ffffff;
+  --Footer_Border: rgba(255, 255, 255, 0.1);
+  --Footer_Icon_Bg: rgba(255, 255, 255, 0.1);
+
+  /* Status Colors */
+  --Error_Color: #ef4444;
+  --Success_Color: #22c55e;
+  --Warning_Color: #f59e0b;
+
+  /* Shadows */
+  --Shadow_Sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --Shadow_Md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --Shadow_Lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/* --- DARK MODE OVERRIDES --- */
+[data-theme="dark"] {
+  --Background_Main: #0f172a;
+  --Background_Alt: #1e293b;
+  --Surface_Card: #1e293b;
+  --Border_Color: #334155;
+
+  /* Hero Gradient (Dark Mode) */
+  --Hero_Gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+
+  --Text_Primary: #f9fafb;
+  --Text_Secondary: #cbd5e1;
+  --Text_Muted: #64748b;
+
+  /* Footer Specific (Dark Mode) */
+  --Footer_Bg: #020617;
+  --Footer_Text: #9ca3af;
+  --Footer_Heading: #f9fafb;
+  --Footer_Border: #334155;
+  --Footer_Icon_Bg: #334155;
+
+  --Shadow_Sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --Shadow_Md: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+  --Shadow_Lg: 0 10px 15px -3px rgb(0 0 0 / 0.3);
+}
+
+/* --- Global Styles --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  /* Apply Manrope to everything by default */
+  font-family: var(--Font_Body);
+}
+
+body {
+  background-color: var(--Background_Main);
+  color: var(--Text_Primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--Font_Heading);
+  font-weight: 700; /* Manrope looks great with bold headings */
+  color: var(--Text_Primary);
+}
+
+button {
+  font-family: var(--Font_Heading);
+  cursor: pointer;
+}
+
+/* Utility Classes */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Button Styles (using theme vars) */
+.btn-primary {
+  background-color: var(--Primary_Color);
+  color: var(--Text_Inverse);
+  padding: 10px 24px;
+  border-radius: 9999px;
+  border: none;
+  font-weight: 600;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: var(--Primary_Hover);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: var(--Secondary_Color);
+  color: var(--Text_Inverse);
+  padding: 12px 32px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.btn-secondary:hover {
+  background-color: var(--Secondary_Hover);
+  transform: translateY(-2px);
+}
+/* ... existing imports and root variables ... */
+
+/* --- Global Reset & Base Styles --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+body {
+  /* Updated Linear Gradient for the total website */
+  background: linear-gradient(135deg, #fff5f7 0%, #ffffff 50%, #f0f7ff 100%);
+  background-attachment: fixed; /* Keeps gradient nice while scrolling */
+
+  color: var(--Text_Primary);
+  font-family: var(--Font_Body);
+  transition: background 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+}
+
+/* ... rest of your CSS ... */

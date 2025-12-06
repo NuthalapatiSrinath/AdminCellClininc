@@ -1,0 +1,113 @@
+.pageWrapper {
+  width: 100%;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--Background_Main);
+  padding: 20px;
+}
+
+.container {
+  width: 100%;
+  max-width: 500px;
+}
+
+.successCard {
+  background-color: var(--Surface_Card);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: var(--Shadow_Lg);
+  border: 1px solid var(--Border_Color);
+  text-align: center;
+}
+
+.iconWrapper {
+  margin-bottom: 20px;
+  display: inline-block;
+}
+
+.successIcon {
+  color: var(--Success_Color); /* Green */
+}
+
+.title {
+  font-family: var(--Font_Heading);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--Text_Primary);
+  margin-bottom: 10px;
+}
+
+.subText {
+  font-family: var(--Font_Body);
+  font-size: 15px;
+  color: var(--Text_Secondary);
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.subText strong {
+  color: var(--Primary_Color);
+}
+
+.orderDetails {
+  background-color: var(--Background_Alt);
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  text-align: left;
+  border: 1px solid var(--Border_Color);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: var(--Text_Primary);
+}
+.row:last-child {
+  margin-bottom: 0;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.homeBtn {
+  background-color: var(--Primary_Color);
+  color: white;
+  padding: 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.2s;
+}
+.homeBtn:hover {
+  background-color: var(--Primary_Hover);
+}
+
+.callBtn {
+  background-color: transparent;
+  color: var(--Text_Primary);
+  padding: 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--Border_Color);
+  transition: background 0.2s;
+}
+.callBtn:hover {
+  background-color: var(--Background_Alt);
+}

@@ -1,0 +1,194 @@
+.pageWrapper {
+  width: 100%;
+  padding-bottom: 80px;
+  background-color: var(--Background_Main);
+  color: var(--Text_Primary);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 40px;
+}
+
+/* Left Section */
+.title {
+  font-family: var(--Font_Heading);
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: var(--Text_Primary);
+}
+
+.subtitle {
+  color: var(--Text_Secondary);
+  font-size: 14px;
+  margin-bottom: 30px;
+}
+
+.methodsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.methodCard {
+  display: flex;
+  align-items: center;
+  background: var(--Surface_Card);
+  padding: 20px;
+  border: 2px solid var(--Border_Color);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.methodCard.selected {
+  border-color: var(--Primary_Color);
+  background-color: rgba(37, 99, 235, 0.03);
+}
+
+.radioCircle {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--Text_Muted);
+  border-radius: 50%;
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.methodCard.selected .radioCircle {
+  border-color: var(--Primary_Color);
+}
+
+.innerDot {
+  width: 10px;
+  height: 10px;
+  background-color: var(--Primary_Color);
+  border-radius: 50%;
+}
+
+.methodIcon {
+  color: var(--Primary_Color);
+  margin-right: 20px;
+}
+
+.methodText h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.methodText p {
+  font-size: 13px;
+  color: var(--Text_Secondary);
+}
+
+.badge {
+  display: inline-block;
+  background-color: var(--Success_Color);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+/* Right Section */
+.summaryCard {
+  background-color: var(--Surface_Card);
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: var(--Shadow_Md);
+  border: 1px solid var(--Border_Color);
+}
+
+.summaryTitle {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--Border_Color);
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 12px;
+  color: var(--Text_Secondary);
+}
+
+.greenText {
+  color: var(--Success_Color);
+  font-weight: 600;
+}
+
+.divider {
+  height: 1px;
+  background-color: var(--Border_Color);
+  margin: 20px 0;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--Text_Primary);
+  margin-bottom: 24px;
+}
+
+.trustBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--Text_Muted);
+  margin-bottom: 20px;
+  background-color: var(--Background_Alt);
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.payBtn {
+  width: 100%;
+  background-color: var(--Primary_Color);
+  color: white;
+  padding: 16px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.2s;
+}
+
+.payBtn:hover {
+  background-color: var(--Primary_Hover);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .summarySection {
+    order: -1;
+  } /* Show summary first on mobile? Optional */
+}

@@ -1,0 +1,248 @@
+.section {
+  width: 100%;
+  padding: 80px 0;
+  background-color: transparent;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.mainCard {
+  background-color: var(--Surface_Card);
+  border-radius: 16px;
+  box-shadow: var(--Shadow_Md);
+  overflow: hidden;
+  border: 1px solid var(--Border_Color);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* --- Tabs --- */
+.tabsHeader {
+  display: flex;
+  background-color: transparent;
+  border-bottom: 1px solid var(--Border_Color);
+}
+
+.tabBtn {
+  flex: 1;
+  padding: 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  color: var(--Text_Secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: var(--Font_Heading);
+}
+
+.tabBtn:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.activeTab {
+  background-color: #0f172a !important;
+  color: white !important;
+}
+
+/* --- Content --- */
+.contentBody {
+  padding: 40px;
+}
+
+.heading {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--Text_Primary);
+  margin-bottom: 16px;
+  position: relative;
+  display: inline-block;
+  font-family: var(--Font_Heading);
+}
+
+.underline {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 4px;
+  margin-top: 4px;
+  border-radius: 2px;
+}
+
+.description {
+  color: var(--Text_Secondary);
+  margin-bottom: 30px;
+  max-width: 800px;
+  line-height: 1.6;
+}
+
+/* --- Steps Row (Increased Spacing) --- */
+.stepsRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 60px; /* Increased bottom margin for more gap */
+  margin-top: 20px; /* Added top margin to separate from description */
+  position: relative;
+  isolation: isolate;
+}
+
+/* The Connector Line */
+.stepsRow::before {
+  content: "";
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 66.66%;
+  height: 1px;
+  background-color: #e2e8f0;
+  z-index: -1;
+}
+
+.stepItem {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  background-color: transparent;
+}
+
+.stepNumber {
+  width: 32px;
+  height: 32px;
+  background-color: #0f172a;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+  z-index: 2;
+  box-shadow: 0 0 0 8px var(--Surface_Card);
+}
+
+.stepText {
+  /* Aligns title with circle top */
+  margin-top: -7px;
+  padding-right: 10px; /* Prevent text from touching next item */
+}
+
+.stepText h4 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px; /* Increased gap between Title and Desc */
+  color: var(--Text_Primary);
+}
+
+.stepText p {
+  font-size: 13px;
+  color: var(--Text_Secondary);
+  line-height: 1.5;
+}
+
+/* --- Bottom Grid --- */
+.bottomGrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  margin-top: 20px; /* Extra gap above bottom cards */
+}
+
+.infoCard {
+  background-color: var(--Background_Alt);
+  padding: 30px;
+  border-radius: 12px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  transition: background-color 0.3s ease;
+}
+
+.iconBox {
+  background-color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--Shadow_Sm);
+}
+
+.infoContent h4 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  font-weight: 700;
+  color: var(--Text_Primary);
+}
+
+.infoContent p {
+  font-size: 14px;
+  color: var(--Text_Secondary);
+  line-height: 1.6;
+}
+
+/* CTA Card */
+.ctaCard {
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 100%
+  );
+}
+
+.bookBtn {
+  background-color: white;
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 800;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.bookBtn:hover {
+  transform: scale(1.05);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .stepsRow {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .stepsRow::before {
+    display: none;
+  }
+
+  .bottomGrid {
+    grid-template-columns: 1fr;
+  }
+  .ctaCard {
+    padding: 40px;
+  }
+}
+
+@media (max-width: 600px) {
+  .tabsHeader {
+    flex-direction: column;
+  }
+  .tabBtn {
+    border-bottom: 1px solid var(--Border_Color);
+  }
+  .contentBody {
+    padding: 24px;
+  }
+}

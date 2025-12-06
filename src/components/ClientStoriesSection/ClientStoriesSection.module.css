@@ -1,0 +1,76 @@
+.section {
+  width: 100%;
+  padding: 60px 0;
+  position: relative;
+  overflow: hidden;
+
+  /* Transparent allows the global body gradient to show through */
+  background-color: transparent;
+}
+
+.container {
+  /* max-width: 1280px; */
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.heading {
+  font-family: var(--Font_Heading);
+  font-size: 36px;
+  font-weight: 800;
+
+  /* --- UPDATED: Use Primary Blue --- */
+  /* This ensures it is visible on both White and Dark backgrounds */
+  color: var(--Primary_Color);
+
+  margin-bottom: 40px;
+  text-align: center;
+  text-transform: uppercase; /* Optional: Matches other section headers */
+  letter-spacing: 1px;
+}
+
+.scrollContainer {
+  display: flex;
+  overflow-x: auto;
+  gap: 30px;
+  padding: 20px 20px 40px 20px;
+
+  /* Scroll Snap Logic */
+  scroll-snap-type: x mandatory;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Hide Scrollbar */
+.scrollContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollContainer > * {
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .section {
+    padding: 40px 0;
+  }
+
+  .heading {
+    font-size: 28px;
+    margin-bottom: 24px;
+  }
+
+  .scrollContainer {
+    gap: 20px;
+    padding-left: 24px;
+    /* scroll-padding-left: 24px; */
+  }
+
+  .scrollContainer > * {
+    scroll-snap-align: start;
+  }
+}

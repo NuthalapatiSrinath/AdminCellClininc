@@ -1,0 +1,229 @@
+.pageWrapper {
+  width: 100%;
+  padding-bottom: 80px;
+  /* THEME VARIABLES */
+  background-color: var(--Background_Main);
+  color: var(--Text_Primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* --- Header --- */
+.header {
+  background-color: var(--Background_Alt);
+  padding: 40px 0;
+  margin-bottom: 60px;
+  border-bottom: 1px solid var(--Border_Color);
+  transition: background-color 0.3s ease;
+}
+
+.pageTitle {
+  font-family: var(--Font_Heading);
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--Text_Primary);
+  margin-bottom: 8px;
+}
+
+.breadcrumbs {
+  color: var(--Text_Secondary);
+  font-size: 14px;
+}
+
+/* --- Grid --- */
+.contentGrid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 50px;
+}
+
+/* --- Form --- */
+.sectionHeading {
+  font-family: var(--Font_Heading);
+  font-size: 24px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--Text_Primary);
+  margin-bottom: 30px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.inputGroup {
+  width: 100%;
+}
+.row {
+  display: flex;
+  gap: 20px;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--Border_Color);
+  border-radius: 4px;
+  font-size: 15px;
+  font-family: var(--Font_Body);
+
+  /* Important for Dark Mode */
+  background-color: var(--Surface_Card);
+  color: var(--Text_Primary);
+
+  outline: none;
+  transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: var(--Primary_Color);
+}
+
+.textarea {
+  resize: vertical;
+}
+
+.submitBtn {
+  background-color: var(--Primary_Color);
+  color: white;
+  border: none;
+  padding: 14px 40px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  align-self: flex-start;
+  margin-top: 10px;
+  box-shadow: var(--Shadow_Md);
+  transition: background-color 0.2s, opacity 0.2s; /* Added opacity transition */
+}
+
+.submitBtn:hover {
+  background-color: var(--Primary_Hover);
+}
+
+.submitBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* --- Info Cards --- */
+.infoSection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.infoCard {
+  background-color: var(--Background_Alt);
+  padding: 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.iconBox {
+  background-color: var(--Primary_Color);
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 4px;
+}
+
+.infoText h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--Text_Primary);
+  margin-bottom: 6px;
+}
+
+.infoText p,
+.infoText a {
+  font-size: 15px;
+  color: var(--Text-Secondary);
+  line-height: 1.5;
+  text-decoration: none;
+}
+
+.infoText a:hover {
+  color: var(--Primary_Color);
+  text-decoration: underline;
+}
+
+/* --- Toast (UPDATED FOR TOP POSITION) --- */
+.toast {
+  position: fixed;
+  top: 120px; /* Moved to Top (Adjusted to not hide behind navbar if sticky) */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--Success_Color);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 50px;
+  box-shadow: var(--Shadow_Lg);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 9999; /* High Z-Index to show on top of everything */
+  font-weight: 600;
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+.toastClose {
+  background: transparent;
+  border: none;
+  color: inherit; /* Inherit color from parent for better contrast */
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  opacity: 0.8;
+}
+
+.toastClose:hover {
+  opacity: 1;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .contentGrid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .row {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .toast {
+    top: 90px; /* Slightly higher on mobile */
+    width: 90%;
+    justify-content: center;
+  }
+}

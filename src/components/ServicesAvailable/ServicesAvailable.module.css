@@ -1,0 +1,212 @@
+.section {
+  width: 100%;
+  padding: 80px 0;
+  background-color: transparent;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* --- Header --- */
+.header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.title {
+  font-family: var(--Font_Heading);
+  font-size: 36px;
+  font-weight: 800;
+  /* FORCE DARK COLOR: Ensures visibility on light background even if theme is 'dark' */
+  color: #111827;
+  margin-bottom: 12px;
+}
+
+.subtitle {
+  /* FORCE DARK GREY: Ensures visibility on light background */
+  color: #4b5563;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+/* --- Top Grid (Services) --- */
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.serviceCard {
+  background-color: var(--Surface_Card);
+  width: 100%;
+  aspect-ratio: 1 / 1;
+
+  border-radius: 20px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+
+  /* Default Text Color */
+  color: var(--Text_Primary);
+}
+
+/* Default Icon Color */
+.serviceIcon {
+  color: var(--Primary_Color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.serviceIcon svg {
+  width: 32px;
+  height: 32px;
+}
+
+/* Dark Mode Card Override - Cards turn Dark */
+:global([data-theme="dark"]) .serviceCard {
+  background-color: #1e293b;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  /* Text inside cards becomes white */
+  color: #ffffff;
+}
+
+.serviceCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+/* --- ACTIVE STATE (The Blue Card) --- */
+.serviceCard.active {
+  background-color: var(--Primary_Color);
+  color: white !important;
+  box-shadow: 0 12px 35px rgba(37, 99, 235, 0.5);
+  border-color: var(--Primary_Color);
+}
+
+.serviceCard.active .serviceIcon {
+  color: white !important;
+}
+
+.serviceLabel {
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* --- Bottom Grid (Benefits) --- */
+.benefitsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.benefitCard {
+  background-color: var(--Surface_Card);
+  padding: 40px 30px;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 220px;
+}
+
+/* Dark Mode Benefit Card - Cards turn Dark */
+:global([data-theme="dark"]) .benefitCard {
+  background-color: #1e293b;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Ensure text inside Benefit cards adapts correctly */
+:global([data-theme="dark"]) .benefitTitle {
+  color: #ffffff;
+}
+:global([data-theme="dark"]) .benefitDesc {
+  color: #9ca3af;
+}
+
+.benefitCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.benefitIconCircle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #ecf4ff;
+  color: var(--Primary_Color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+:global([data-theme="dark"]) .benefitIconCircle {
+  background-color: rgba(37, 99, 235, 0.15);
+}
+
+.benefitTitle {
+  font-family: var(--Font_Heading);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--Text_Primary);
+  margin-bottom: 12px;
+}
+
+.benefitDesc {
+  color: var(--Text_Secondary);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+  .servicesGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .benefitsGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .servicesGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .serviceCard {
+    border-radius: 16px;
+  }
+
+  .serviceLabel {
+    font-size: 12px;
+  }
+
+  .serviceIcon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .title {
+    font-size: 28px;
+  }
+}

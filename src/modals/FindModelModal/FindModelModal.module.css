@@ -1,0 +1,198 @@
+.modalContainer {
+  background: white;
+  width: 100%;
+  max-width: 450px; /* Phone-width like */
+  border-radius: 20px;
+  padding: 40px 30px;
+  position: relative;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  animation: popIn 0.3s ease-out;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.closeBtn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #111;
+  z-index: 10;
+  transition: transform 0.2s;
+}
+
+.closeBtn:hover {
+  transform: scale(1.1);
+}
+
+.title {
+  font-family: var(--Font_Heading);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--Text_Primary);
+  margin-bottom: 8px;
+}
+
+.instruction {
+  font-size: 14px;
+  color: var(--Text_Secondary);
+  margin-bottom: 30px;
+}
+
+/* --- The Phone Screen Graphic --- */
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.placeholderScreen {
+  width: 240px;
+  height: 320px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Top Half (Pink) */
+.placeholderScreen::before {
+  content: "";
+  flex: 1;
+  background: linear-gradient(135deg, #eab8c3 0%, #d695a5 100%);
+  display: block;
+}
+
+/* Settings Icon Area (Absolute to overlap top half) */
+.settingsIcon {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 32px;
+  background: rgba(255, 255, 255, 0.3);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Bottom Half (Black) */
+.aboutBox {
+  background-color: #000;
+  color: white;
+  padding: 20px;
+  text-align: left;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+.aboutBox strong {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.aboutBox p {
+  font-size: 10px;
+  color: #888;
+  margin: 0;
+}
+
+/* The "Galaxy A30s" Highlight */
+.modelHighlight {
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 15px;
+  padding-bottom: 20px;
+  position: relative;
+}
+
+/* The Green Scan Line Effect */
+.placeholderScreen::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #22c55e; /* Green line */
+  box-shadow: 0 0 10px #22c55e;
+  animation: scan 2s infinite linear;
+  opacity: 0.8;
+}
+
+@keyframes scan {
+  0% {
+    top: 0;
+  }
+  50% {
+    top: 100%;
+  }
+  100% {
+    top: 0;
+  }
+}
+
+/* --- Footer Actions --- */
+.cantFindText {
+  font-size: 14px;
+  color: var(--Text_Primary);
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.contactBtn {
+  background-color: #ed1c24; /* Red from image */
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(237, 28, 36, 0.3);
+}
+
+.contactBtn:hover {
+  background-color: #c41219;
+  transform: translateY(-2px);
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .modalContainer {
+    padding: 30px 20px;
+  }
+  .placeholderScreen {
+    width: 200px;
+    height: 280px;
+  }
+}
