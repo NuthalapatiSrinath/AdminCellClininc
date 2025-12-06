@@ -1,12 +1,13 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { closeModal } from "../../redux/slices/modalSlice";
 import { loginSuccess } from "../../redux/slices/authSlice";
+import { authService } from "../../services/authService"; // Import Auth Service
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ArrowLeft, CheckCircle, AlertCircle } from "lucide-react";
+import { X, CheckCircle, AlertCircle, Lock, Mail, Loader2 } from "lucide-react";
 import styles from "./LoginModal.module.css";
 
-// --- Toast Component (Internal) ---
+// --- Toast Component ---
 const Toast = ({ message, type = "success", onClose }) => {
   return (
     <motion.div
@@ -26,81 +27,52 @@ const Toast = ({ message, type = "success", onClose }) => {
 
 const LoginModal = () => {
   const dispatch = useDispatch();
-  const [step, setStep] = useState(1); // 1: Mobile, 2: OTP
-  const [mobile, setMobile] = useState("");
-  const [otp, setOtp] = useState(["", "", "", ""]);
-  const otpInputRefs = useRef([]);
 
-  // Toast State
-  const [toast, setToast] = useState(null); // { message: "", type: "success" | "error" }
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState(null);
 
-  // Helper to show toast
   const showToast = (message, type = "success") => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 3000);
   };
 
-  // Focus first OTP input on step change
-  useEffect(() => {
-    if (step === 2 && otpInputRefs.current[0]) {
-      otpInputRefs.current[0].focus();
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    if (!email || !password) {
+      showToast("Please fill in all fields", "error");
+      return;
     }
-  }, [step]);
 
-  // Step 1: Validate Mobile
-  const handleContinue = () => {
-    if (mobile.length === 10) {
-      showToast(`OTP sent to +91 ${mobile}`, "success");
-      setStep(2);
-    } else {
-      showToast("Please enter a valid 10-digit number", "error");
+    setLoading(true);
+
+    try {
+      const response = await authService.login(email, password);
+
+      if (response.success) {
+        showToast("Login Successful!", "success");
+
+        // Dispatch to Redux
+        dispatch(loginSuccess({ email, role: response.user?.role || "admin" }));
+
+        // Close modal after short delay
+        setTimeout(() => {
+          dispatch(closeModal());
+        }, 1000);
+      } else {
+        showToast(response.message || "Invalid Credentials", "error");
+      }
+    } catch (error) {
+      showToast(error.toString(), "error");
+    } finally {
+      setLoading(false);
     }
-  };
-
-  // Step 2: Handle OTP Input
-  const handleOtpChange = (index, value) => {
-    if (isNaN(value)) return;
-    const newOtp = [...otp];
-    newOtp[index] = value;
-    setOtp(newOtp);
-
-    if (value !== "" && index < 3) {
-      otpInputRefs.current[index + 1].focus();
-    }
-  };
-
-  const handleKeyDown = (index, e) => {
-    if (e.key === "Backspace" && !otp[index] && index > 0) {
-      otpInputRefs.current[index - 1].focus();
-    }
-  };
-
-  // Step 3: Verify Login
-  const handleVerify = () => {
-    const enteredOtp = otp.join("");
-    if (enteredOtp.length === 4) {
-      showToast("Login Successful!", "success");
-
-      // Delay close slightly to show success message
-      setTimeout(() => {
-        const userData = { name: "Srinath", mobile: mobile };
-        dispatch(loginSuccess(userData));
-        dispatch(closeModal());
-      }, 1000);
-    } else {
-      showToast("Invalid OTP. Please try again.", "error");
-    }
-  };
-
-  const handleResend = () => {
-    setOtp(["", "", "", ""]);
-    showToast("OTP Resent Successfully!", "success");
-    otpInputRefs.current[0].focus();
   };
 
   return (
     <div className={styles.modalContainer}>
-      {/* Toast Notification */}
       <AnimatePresence>
         {toast && (
           <Toast
@@ -119,91 +91,78 @@ const LoginModal = () => {
       </button>
 
       <div className={styles.grid}>
-        {/* Left Panel: Illustration */}
+        {/* Left Panel: Admin Illustration */}
         <div className={styles.leftPanel}>
-          <h2 className={styles.loginTitle}>
-            {step === 1 ? "Login / Signup" : "Verify OTP"}
-          </h2>
+          <h2 className={styles.loginTitle}>Admin Login</h2>
           <div className={styles.illustrationWrapper}>
             <img
-              src="https://cdni.iconscout.com/illustration/premium/thumb/mobile-repair-service-4315043-3610794.png"
-              alt="Login Illustration"
+              src="https://cdni.iconscout.com/illustration/premium/thumb/secure-login-4315053-3610804.png"
+              alt="Admin Login"
               className={styles.illustration}
             />
           </div>
         </div>
 
-        {/* Right Panel: Form */}
+        {/* Right Panel: Login Form */}
         <div className={styles.rightPanel}>
-          {/* STEP 1 */}
-          {step === 1 && (
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className={styles.formStep}
-            >
-              <label className={styles.label}>Enter Mobile Number</label>
-              <div className={styles.inputGroup}>
-                <span className={styles.countryCode}>+91</span>
-                <input
-                  type="tel"
-                  placeholder="Enter Mobile Number"
-                  className={styles.input}
-                  value={mobile}
-                  onChange={(e) => {
-                    const val = e.target.value.replace(/\D/g, "");
-                    if (val.length <= 10) setMobile(val);
-                  }}
-                />
-              </div>
-              <button className={styles.actionBtn} onClick={handleContinue}>
-                Continue
-              </button>
-            </motion.div>
-          )}
-
-          {/* STEP 2 */}
-          {step === 2 && (
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className={styles.otpContainer}
-            >
-              <button className={styles.backBtn} onClick={() => setStep(1)}>
-                <ArrowLeft size={16} /> Edit Number
-              </button>
-
-              <p className={styles.otpInstruction}>
-                We've sent a code to <strong>+91 {mobile}</strong>
-              </p>
-
-              <div className={styles.otpInputs}>
-                {otp.map((digit, index) => (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className={styles.formStep}
+          >
+            <form onSubmit={handleLogin} className={styles.form}>
+              {/* Email Input */}
+              <div className={styles.inputWrapper}>
+                <label className={styles.label}>Email Address</label>
+                <div className={styles.inputGroup}>
+                  <Mail size={20} className={styles.inputIcon} />
                   <input
-                    key={index}
-                    ref={(el) => (otpInputRefs.current[index] = el)}
-                    type="text"
-                    maxLength={1}
-                    className={styles.otpBox}
-                    value={digit}
-                    onChange={(e) => handleOtpChange(index, e.target.value)}
-                    onKeyDown={(e) => handleKeyDown(index, e)}
+                    type="email"
+                    placeholder="admin@cellclinic.com"
+                    className={styles.input}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
-                ))}
+                </div>
               </div>
 
-              <button className={styles.actionBtn} onClick={handleVerify}>
-                Verify & Login
+              {/* Password Input */}
+              <div className={styles.inputWrapper}>
+                <label className={styles.label}>Password</label>
+                <div className={styles.inputGroup}>
+                  <Lock size={20} className={styles.inputIcon} />
+                  <input
+                    type="password"
+                    placeholder="••••••••"
+                    className={styles.input}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className={styles.actionBtn}
+                disabled={loading}
+              >
+                {loading ? (
+                  <span
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Loader2 className={styles.spin} size={20} /> Verifying...
+                  </span>
+                ) : (
+                  "Login"
+                )}
               </button>
-
-              <div className={styles.resendText}>
-                Didn't receive code?{" "}
-                <button onClick={handleResend} className={styles.resendBtn}>
-                  Resend
-                </button>
-              </div>
-            </motion.div>
-          )}
+            </form>
+          </motion.div>
         </div>
       </div>
     </div>

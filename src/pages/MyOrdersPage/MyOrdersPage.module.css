@@ -7,7 +7,7 @@
 }
 
 .container {
-  max-width: 800px;
+  max-width: 700px; /* Slightly tighter width for better card readability */
   margin: 0 auto;
   padding: 40px 24px;
 }
@@ -26,7 +26,7 @@
   gap: 24px;
 }
 
-/* Order Card */
+/* --- Order Card --- */
 .orderCard {
   background-color: var(--Surface_Card);
   border: 1px solid var(--Border_Color);
@@ -34,92 +34,151 @@
   padding: 24px;
   box-shadow: var(--Shadow_Sm);
   transition: box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
 }
 
 .orderCard:hover {
   box-shadow: var(--Shadow_Md);
 }
 
-/* Header */
+/* --- Top Meta (ID & Date) --- */
+.topMeta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 11px;
+  color: var(--Text_Muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* --- Header --- */
 .cardHeader {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: 16px;
 }
 
 .deviceTitle {
   font-family: var(--Font_Heading);
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
-  color: var(--Text_Primary);
+  color: var(--Primary_Color); /* Highlight device name */
 }
 
-.serviceName {
-  font-size: 14px;
-  color: var(--Text_Secondary);
-}
-
-/* Status Badges */
+/* --- Status Badges --- */
 .statusBadge {
   font-size: 12px;
   font-weight: 700;
-  padding: 4px 10px;
+  padding: 4px 12px;
   border-radius: 50px;
   text-transform: uppercase;
+  white-space: nowrap;
 }
-
-.InProgress {
-  background-color: #fff7ed; /* Light Orange */
-  color: #ea580c;
-}
-
-.Completed {
-  background-color: #f0fdf4; /* Light Green */
-  color: #16a34a;
-}
-
 .Pending {
   background-color: #eff6ff;
   color: #2563eb;
 }
-
-/* Info Row */
-.infoRow {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  margin-bottom: 20px;
+.Contacted {
+  background-color: #fff7ed;
+  color: #ea580c;
 }
-
-.infoItem {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  color: var(--Text_Muted);
+.Resolved {
+  background-color: #f0fdf4;
+  color: #16a34a;
 }
-
-.amount {
-  margin-left: auto;
-  font-weight: 700;
-  font-size: 16px;
-  color: var(--Text_Primary);
+.Cancelled {
+  background-color: #fef2f2;
+  color: #dc2626;
 }
 
 .divider {
   border: 0;
   height: 1px;
   background-color: var(--Border_Color);
-  margin: 0 0 20px 0;
+  margin: 16px 0;
+  opacity: 0.6;
 }
 
-/* Stepper */
+.sectionTitle {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--Text_Muted);
+  margin-bottom: 10px;
+}
+
+/* --- Customer Grid --- */
+.customerGrid {
+  display: flex;
+  gap: 30px;
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--Text_Primary);
+}
+
+.infoItem a {
+  color: var(--Text_Primary);
+  text-decoration: none;
+}
+.infoItem a:hover {
+  color: var(--Primary_Color);
+  text-decoration: underline;
+}
+
+/* --- Services List --- */
+.servicesList {
+  background-color: var(--Background_Alt); /* Subtle box for numbers */
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.serviceRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--Text_Secondary);
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--Border_Color);
+  font-weight: 700;
+  color: var(--Text_Primary);
+}
+
+.totalAmount {
+  color: var(--Success_Color);
+  font-size: 15px;
+}
+
+/* --- Stepper (Unchanged logic, cleaner styles) --- */
 .stepperContainer {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   position: relative;
+  margin-top: 10px;
 }
 
 .step {
@@ -132,24 +191,25 @@
 }
 
 .stepIcon {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
-  background-color: var(--Background_Alt);
+  background-color: var(--Background_Main);
   border: 2px solid var(--Border_Color);
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--Text_Muted);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   transition: all 0.3s ease;
 }
 
 .stepLabel {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--Text_Muted);
   text-align: center;
-  font-weight: 500;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
 /* Active/Completed States */
@@ -163,21 +223,20 @@
   background-color: white;
   border-color: var(--Primary_Color);
   color: var(--Primary_Color);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
 }
 .step.current .stepLabel {
   color: var(--Primary_Color);
-  font-weight: 700;
 }
 
-.step.completed .stepLabel {
-  color: var(--Text_Primary);
+.step.errorStep .stepIcon {
+  border-color: #dc2626;
+  color: #dc2626;
+  background-color: #fef2f2;
 }
 
-/* Connecting Line */
 .stepLine {
   position: absolute;
-  top: 14px;
+  top: 12px;
   left: 50%;
   width: 100%;
   height: 2px;
@@ -189,7 +248,38 @@
   background-color: var(--Success_Color);
 }
 
-/* Hide last line */
 .step:last-child .stepLine {
   display: none;
+}
+
+/* States */
+.loadingState,
+.emptyState,
+.errorState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 0;
+  color: var(--Text_Muted);
+  gap: 16px;
+}
+.spin {
+  animation: spin 1s linear infinite;
+  color: var(--Primary_Color);
+}
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.retryBtn {
+  background-color: var(--Primary_Color);
+  color: white;
+  border: none;
+  padding: 8px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
 }

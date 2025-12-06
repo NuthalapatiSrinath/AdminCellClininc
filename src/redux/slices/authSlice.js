@@ -1,8 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// Check if token exists on initial load
+const token = localStorage.getItem("adminToken");
+
 const initialState = {
-  isAuthenticated: false,
-  user: null, // { name: "User", mobile: "9876543210" }
+  isAuthenticated: !!token, // True if token exists
+  user: token ? { role: "admin" } : null,
 };
 
 const authSlice = createSlice({
@@ -16,6 +19,7 @@ const authSlice = createSlice({
     logout: (state) => {
       state.isAuthenticated = false;
       state.user = null;
+      localStorage.removeItem("adminToken"); // Clear token
     },
   },
 });

@@ -18,6 +18,9 @@ import BookingSuccessPage from "../pages/BookingSuccessPage/BookingSuccessPage";
 import ServicesPage from "../pages/ServicesPage/ServicesPage";
 import MobileRepairPage from "../pages/MobileRepairPage/MobileRepairPage";
 import AdminPage from "../pages/AdminPage/AdminPage";
+import MyOrdersPage from "../pages/MyOrdersPage/MyOrdersPage";
+import ImportDataPage from "../pages/ImportDataPage/ImportDataPage";
+import AdminCatalogPage from "../pages/AdminCatalogPage/AdminCatalogPage";
 
 // Helper to scroll to top on route change
 function ScrollToTop() {
@@ -66,9 +69,10 @@ export default function AppRoutes() {
           <Route path="services" element={<ServicesPage />} />
           <Route path="services/iphone" element={<ServicesPage />} />
           <Route path="services/macbook" element={<ServicesPage />} />
-
+          <Route path="/admin/import-data" element={<ImportDataPage />} />
+          <Route path="/admin/catalog" element={<AdminCatalogPage />} />
           {/* Commented out / Future Routes preserved */}
-          {/* <Route path="orders" element={<MyOrdersPage />} /> */}
+          <Route path="orders" element={<MyOrdersPage />} />
           {/* <Route path="pickup-checklist" element={<PickupChecklistPage />} /> */}
           {/* <Route path="payment" element={<PaymentPage />} /> */}
         </Route>
