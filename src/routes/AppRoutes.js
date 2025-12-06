@@ -17,6 +17,7 @@ import AddressInfoPage from "../pages/AddressInfoPage/AddressInfoPage";
 import BookingSuccessPage from "../pages/BookingSuccessPage/BookingSuccessPage";
 import ServicesPage from "../pages/ServicesPage/ServicesPage";
 import MobileRepairPage from "../pages/MobileRepairPage/MobileRepairPage";
+import AdminPage from "../pages/AdminPage/AdminPage";
 
 // Helper to scroll to top on route change
 function ScrollToTop() {
@@ -39,6 +40,7 @@ export default function AppRoutes() {
         <Route path="/" element={<DashboardLayout />}>
           {/* Child Routes */}
           <Route index element={<HomePage />} />
+          <Route path="admin" element={<AdminPage />} />
           <Route path="contact" element={<ContactUsPage />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="spotlight" element={<SpotlightPage />} />

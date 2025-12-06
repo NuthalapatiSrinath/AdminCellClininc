@@ -134,10 +134,10 @@ const TopBar = () => {
                 Services
               </Link>
               <Link
-                to="/privacy-policy"
-                className={isActive("/privacy-policy") ? styles.linkActive : ""}
+                to="/admin"
+                className={isActive("/admin") ? styles.linkActive : ""}
               >
-                Privacy Policy
+                Admin Controls
               </Link>
               <Link
                 to="/contact"
@@ -240,11 +240,11 @@ const TopBar = () => {
               Services
             </Link>
             <Link
-              to="/privacy-policy"
+              to="/admin"
               onClick={handleLinkClick}
-              className={isActive("/privacy-policy") ? styles.linkActive : ""}
+              className={isActive("admin") ? styles.linkActive : ""}
             >
-              Privacy Policy
+              Admin Controls
             </Link>
             <Link
               to="/contact"
