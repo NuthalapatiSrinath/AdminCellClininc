@@ -131,7 +131,10 @@ const Footer = () => {
         </div>
 
         <div className={styles.copyright}>
-          <p>© 2024 Cell Clinic Hyd. All rights reserved.</p>
+          <p>
+            © 2024 Cell Clinic Hyd. All rights reserved. Designed & Developed By
+            Panacea IT Services – +91 8686818384
+          </p>
         </div>
       </div>
     </footer>

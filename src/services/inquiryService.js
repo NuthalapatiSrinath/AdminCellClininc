@@ -1,14 +1,12 @@
 import apiClient from "../api/apiClient";
-import { API_ROUTES } from "../api/routes";
 
 export const inquiryService = {
-  // User sends booking request
-  createInquiry: async (data) => {
-    return await apiClient.post(API_ROUTES.INQUIRY.CREATE, data);
-  },
+  createInquiry: async (data) => await apiClient.post("/inquiry/create", data),
+  getAllInquiries: async () => await apiClient.get("/inquiry/all"),
 
-  // Admin fetches all requests
-  getAllInquiries: async () => {
-    return await apiClient.get(API_ROUTES.INQUIRY.GET_ALL);
-  },
+  // --- New Methods ---
+  updateInquiry: async (id, data) =>
+    await apiClient.put(`/inquiry/${id}`, data),
+  deleteInquiry: async (id) => await apiClient.delete(`/inquiry/${id}`),
+  deleteAllInquiries: async () => await apiClient.delete("/inquiry/all"),
 };

@@ -21,15 +21,13 @@ import AdminPage from "../pages/AdminPage/AdminPage";
 import MyOrdersPage from "../pages/MyOrdersPage/MyOrdersPage";
 import ImportDataPage from "../pages/ImportDataPage/ImportDataPage";
 import AdminCatalogPage from "../pages/AdminCatalogPage/AdminCatalogPage";
+import AdminBrandDetailsPage from "../pages/AdminBrandDetailsPage/AdminBrandDetailsPage";
 
-// Helper to scroll to top on route change
 function ScrollToTop() {
   const { pathname } = useLocation();
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
-
   return null;
 }
 
@@ -37,13 +35,11 @@ export default function AppRoutes() {
   return (
     <>
       <ScrollToTop />
-
       <Routes>
-        {/* Parent Route: The Layout */}
+        {/* Parent Route */}
         <Route path="/" element={<DashboardLayout />}>
-          {/* Child Routes */}
+          {/* Public Routes */}
           <Route index element={<HomePage />} />
-          <Route path="admin" element={<AdminPage />} />
           <Route path="contact" element={<ContactUsPage />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="spotlight" element={<SpotlightPage />} />
@@ -54,27 +50,30 @@ export default function AppRoutes() {
           <Route path="partner" element={<PartnerPage />} />
           <Route path="faq" element={<FaqPage />} />
 
-          {/* REPAIR ROUTES */}
-          {/* Brand Page: Uses name for SEO (e.g., /repair-brand/apple) */}
+          {/* Repair Routes */}
           <Route path="repair-brand/:brandName" element={<RepairPage />} />
-
-          {/* Model Page: UPDATED to use ID (e.g., /repair/model/12345) */}
           <Route path="repair/model/:id" element={<ModelRepairPage />} />
+          <Route path="repair/mobile" element={<MobileRepairPage />} />
 
           <Route path="checkout" element={<AddressInfoPage />} />
           <Route path="booking-success" element={<BookingSuccessPage />} />
-          <Route path="repair/mobile" element={<MobileRepairPage />} />
 
-          {/* Services Pages */}
+          {/* Services */}
           <Route path="services" element={<ServicesPage />} />
           <Route path="services/iphone" element={<ServicesPage />} />
           <Route path="services/macbook" element={<ServicesPage />} />
-          <Route path="/admin/import-data" element={<ImportDataPage />} />
-          <Route path="/admin/catalog" element={<AdminCatalogPage />} />
-          {/* Commented out / Future Routes preserved */}
-          <Route path="orders" element={<MyOrdersPage />} />
-          {/* <Route path="pickup-checklist" element={<PickupChecklistPage />} /> */}
-          {/* <Route path="payment" element={<PaymentPage />} /> */}
+
+          {/* --- ADMIN ROUTES --- */}
+          {/* Main Dashboard */}
+          <Route path="admin" element={<AdminPage />} />
+
+          {/* Sub-Pages (Cleaned Paths) */}
+          <Route path="admin/catalog" element={<AdminCatalogPage />} />
+          <Route path="admin/import-data" element={<ImportDataPage />} />
+          <Route path="admin/orders" element={<MyOrdersPage />} />
+
+          {/* The Detail Page Route */}
+          <Route path="admin/brand/:id" element={<AdminBrandDetailsPage />} />
         </Route>
 
         <Route path="*" element={<div>404 Not Found</div>} />

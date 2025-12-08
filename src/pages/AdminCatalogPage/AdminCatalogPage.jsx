@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { openModal } from "../../redux/slices/modalSlice"; // Redux Action
+import { useNavigate } from "react-router-dom";
+import { openModal } from "../../redux/slices/modalSlice";
 import {
   UploadCloud,
   Plus,
@@ -8,8 +9,11 @@ import {
   AlertCircle,
   Smartphone,
   Tag,
+  Wrench,
   Loader2,
   FileSpreadsheet,
+  Trash2,
+  Edit,
 } from "lucide-react";
 import styles from "./AdminCatalogPage.module.css";
 import { catalogService } from "../../services/catalogService";
@@ -17,6 +21,7 @@ import * as XLSX from "xlsx";
 
 const AdminCatalogPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [brands, setBrands] = useState([]);
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState({
@@ -38,22 +43,46 @@ const AdminCatalogPage = () => {
     }
   };
 
-  // --- Success Handler ---
   const handleSuccess = (msg) => {
     setStatus({ loading: false, message: msg, type: "success" });
-    loadBrands(); // Refresh list
+    loadBrands();
     setTimeout(
       () => setStatus({ loading: false, message: "", type: "" }),
       4000
     );
   };
 
-  // --- DISPATCH MODALS ---
+  // --- HANDLERS ---
+
+  const handleManageBrand = (brandId) => {
+    if (brandId) {
+      navigate(`/admin/brand/${brandId}`);
+    }
+  };
+
+  const handleDeleteBrand = async (id, name) => {
+    if (
+      !window.confirm(
+        `Delete ${name}? This will permanently remove all devices and services under it.`
+      )
+    )
+      return;
+
+    setStatus({ loading: true, message: "Deleting...", type: "info" });
+    try {
+      await catalogService.deleteBrand(id);
+      handleSuccess(`Deleted ${name} successfully.`);
+    } catch (err) {
+      setStatus({ loading: false, message: "Delete Failed", type: "error" });
+    }
+  };
+
+  // Modals
   const openBrandModal = () => {
     dispatch(
       openModal({
         type: "CREATE_BRAND",
-        data: { onSuccess: handleSuccess }, // Pass callback in data
+        modalData: { onSuccess: handleSuccess },
       })
     );
   };
@@ -62,20 +91,25 @@ const AdminCatalogPage = () => {
     dispatch(
       openModal({
         type: "CREATE_DEVICE",
-        data: {
-          brands: brands, // Pass loaded brands
-          onSuccess: handleSuccess,
-        },
+        modalData: { brands, onSuccess: handleSuccess },
       })
     );
   };
 
-  // --- EXCEL UPLOAD ---
+  const openServiceModal = () => {
+    dispatch(
+      openModal({
+        type: "CREATE_SERVICE",
+        modalData: { brands, onSuccess: handleSuccess },
+      })
+    );
+  };
+
   const handleExcelUpload = async () => {
     if (!file) return;
     setStatus({
       loading: true,
-      message: "Processing Big Data...",
+      message: "Processing Master Sheet...",
       type: "info",
     });
 
@@ -90,28 +124,87 @@ const AdminCatalogPage = () => {
         type: "success",
       });
       setFile(null);
+      loadBrands();
     } catch (err) {
+      console.error(err);
       setStatus({
         loading: false,
-        message: "Upload Failed. Check console for details.",
+        message: err.response?.data?.message || "Upload Failed",
         type: "error",
       });
     }
   };
 
+  // --- UPDATED TEMPLATE GENERATOR ---
   const downloadTemplate = () => {
-    const headers = [
+    // We create data that demonstrates BOTH scenarios
+    const templateData = [
+      // --- SCENARIO A: Fill Down (Standard / Vertical) ---
+      // Row 1: Define Brand + Device + 1st Service
       {
-        Brand_Name: "Xiaomi",
-        Device_Name: "Xiaomi 14",
-        Service_Title: "Display",
-        Service_Price: 5000,
+        Brand_Name: "Samsung",
+        Brand_Image: "https://example.com/samsung.png",
+        Brand_Title: "Samsung Repair",
+        Brand_Hero_Text: "GALAXY EXPERTS",
+        Brand_Hero_Desc: "We fix all Galaxy phones.",
+        Device_Name: "Galaxy S24",
+        Device_Image: "https://example.com/s24.png",
+        Device_Type: "mobile",
+        Service_Title: "Screen Replacement",
+        Service_Desc: "Original AMOLED",
+        Service_Price: 15000,
+      },
+      // Row 2: Leave Brand/Device blank (Backend will use "Samsung/Galaxy S24" from above)
+      {
+        Brand_Name: "",
+        Brand_Image: "",
+        Brand_Title: "",
+        Brand_Hero_Text: "",
+        Brand_Hero_Desc: "",
+        Device_Name: "",
+        Device_Image: "",
+        Device_Type: "",
+        Service_Title: "Battery Replacement",
+        Service_Desc: "Original Battery",
+        Service_Price: 3000,
+      },
+      // Row 3: Still same device
+      {
+        Brand_Name: "",
+        Brand_Image: "",
+        Brand_Title: "",
+        Brand_Hero_Text: "",
+        Brand_Hero_Desc: "",
+        Device_Name: "",
+        Device_Image: "",
+        Device_Type: "",
+        Service_Title: "Charging Port",
+        Service_Desc: "Fix charging issues",
+        Service_Price: 1200,
+      },
+
+      // --- SCENARIO B: Comma Separated (Horizontal / Fast) ---
+      // Row 4: New Brand (Apple) + New Device + MULTIPLE Services in one cell
+      {
+        Brand_Name: "Apple",
+        Brand_Image: "https://example.com/apple.png",
+        Brand_Title: "Apple Repair",
+        Brand_Hero_Text: "IPHONE EXPERTS",
+        Brand_Hero_Desc: "We fix all iPhones.",
+        Device_Name: "iPhone 15",
+        Device_Image: "https://example.com/i15.png",
+        Device_Type: "mobile",
+        // Notice the commas below:
+        Service_Title: "Screen Repair, Battery Replacement, Back Glass",
+        Service_Desc: "Original OLED, High Capacity, Laser fix",
+        Service_Price: "28000, 5000, 4000",
       },
     ];
-    const ws = XLSX.utils.json_to_sheet(headers);
+
+    const ws = XLSX.utils.json_to_sheet(templateData);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Template");
-    XLSX.writeFile(wb, "Catalog_Template.xlsx");
+    XLSX.utils.book_append_sheet(wb, ws, "Master_Template");
+    XLSX.writeFile(wb, "Catalog_Master_Template.xlsx");
   };
 
   return (
@@ -123,57 +216,100 @@ const AdminCatalogPage = () => {
           <div className={`${styles.statusBanner} ${styles[status.type]}`}>
             {status.type === "success" ? (
               <CheckCircle size={20} />
-            ) : (
+            ) : status.type === "error" ? (
               <AlertCircle size={20} />
+            ) : (
+              <Loader2 className={styles.spin} size={20} />
             )}
-            {status.message}
+            <span>{status.message}</span>
           </div>
         )}
 
         <div className={styles.grid}>
-          {/* Card 1: Manual Entry */}
+          {/* --- CARD 1: MANUAL ENTRY --- */}
           <div className={styles.card}>
-            <h2>
-              <Plus size={20} /> Manual Entry
-            </h2>
-            <p>Open popups to add single items.</p>
+            <div className={styles.cardHeader}>
+              <h2>
+                <Plus size={22} /> Manual Entry
+              </h2>
+              <p>Create individual items with instant updates.</p>
+            </div>
+
             <div className={styles.btnGroup}>
               <button className={styles.actionBtn} onClick={openBrandModal}>
-                <Tag size={18} /> Add Brand
+                <div className={styles.iconBox}>
+                  <Tag size={20} />
+                </div>
+                <span>Add Brand</span>
               </button>
+
               <button className={styles.actionBtn} onClick={openDeviceModal}>
-                <Smartphone size={18} /> Add Device
+                <div className={styles.iconBox}>
+                  <Smartphone size={20} />
+                </div>
+                <span>Add Device</span>
+              </button>
+
+              <button className={styles.actionBtn} onClick={openServiceModal}>
+                <div className={styles.iconBox}>
+                  <Wrench size={20} />
+                </div>
+                <span>Add Service</span>
               </button>
             </div>
           </div>
 
-          {/* Card 2: Excel Upload */}
+          {/* --- CARD 2: BULK UPLOAD --- */}
           <div className={styles.card}>
-            <h2>
-              <UploadCloud size={20} /> Bulk Master Upload
-            </h2>
-            <p>Upload .xlsx file with all details.</p>
+            <div className={styles.cardHeader}>
+              <h2>
+                <UploadCloud size={22} /> Master Upload
+              </h2>
+              <p>
+                Upload .xlsx file to update Brands, Devices & Services at once.
+              </p>
+            </div>
+
             <div className={styles.uploadBox}>
-              <input
-                type="file"
-                accept=".xlsx, .xls"
-                onChange={(e) => setFile(e.target.files[0])}
-                className={styles.fileInput}
-              />
+              <div className={styles.fileInputWrapper}>
+                <input
+                  type="file"
+                  accept=".xlsx, .xls"
+                  onChange={(e) => setFile(e.target.files[0])}
+                  className={styles.fileInput}
+                  id="excel-upload"
+                />
+                <label htmlFor="excel-upload" className={styles.fileLabel}>
+                  {file ? (
+                    <span className={styles.fileName}>{file.name}</span>
+                  ) : (
+                    <>
+                      <FileSpreadsheet
+                        size={24}
+                        className={styles.uploadIcon}
+                      />
+                      <span>Click to Select Excel File</span>
+                    </>
+                  )}
+                </label>
+              </div>
+
               <div className={styles.uploadActions}>
                 <button
                   className={styles.downloadBtn}
                   onClick={downloadTemplate}
+                  title="Download Template Format"
                 >
                   <FileSpreadsheet size={18} /> Template
                 </button>
+
                 <button
                   className={styles.uploadBtn}
                   onClick={handleExcelUpload}
                   disabled={!file || status.loading}
                 >
                   {status.loading ? (
-                    <Loader2 className={styles.spin} />
+                    <Loader2 className={styles.spin} size={18} />
                   ) : (
                     "Upload Data"
                   )}
@@ -181,6 +317,53 @@ const AdminCatalogPage = () => {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* --- MANAGE BRANDS SECTION --- */}
+        <div className={styles.brandsSection}>
+          <h3>Manage Existing Brands ({brands.length})</h3>
+
+          {brands.length === 0 ? (
+            <p className={styles.emptyText}>
+              No brands found. Add one manually or upload Excel.
+            </p>
+          ) : (
+            <div className={styles.brandsGrid}>
+              {brands.map((brand) => (
+                <div key={brand._id} className={styles.brandCard}>
+                  <img
+                    src={brand.image}
+                    alt={brand.name}
+                    className={styles.brandLogo}
+                    onError={(e) =>
+                      (e.target.src =
+                        "https://via.placeholder.com/100?text=No+Img")
+                    }
+                  />
+
+                  <div className={styles.brandInfo}>
+                    <h4>{brand.name}</h4>
+                    <div className={styles.cardActions}>
+                      <button
+                        className={styles.editBtn}
+                        onClick={() => handleManageBrand(brand._id)}
+                        title="Manage Brand Details"
+                      >
+                        <Edit size={14} /> Manage
+                      </button>
+                      <button
+                        className={styles.deleteBtn}
+                        onClick={() => handleDeleteBrand(brand._id, brand.name)}
+                        title="Delete Brand"
+                      >
+                        <Trash2 size={14} /> Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

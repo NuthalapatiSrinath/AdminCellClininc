@@ -1,0 +1,336 @@
+.pageWrapper {
+  padding: 40px 24px;
+  background-color: var(--Background_Main);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.backBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--Text_Secondary);
+  transition: color 0.2s;
+}
+.backBtn:hover {
+  color: var(--Primary_Color);
+}
+
+.deleteBrandBtn {
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+.deleteBrandBtn:hover {
+  background: #fca5a5;
+}
+
+/* Status Banner */
+.statusBanner {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 14px;
+}
+.success {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #86efac;
+}
+.error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+.info {
+  background: #e0f2fe;
+  color: #075985;
+  border: 1px solid #7dd3fc;
+}
+
+/* Brand Card */
+.brandSection {
+  background: var(--Surface_Card);
+  border: 1px solid var(--Border_Color);
+  border-radius: 16px;
+  padding: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--Shadow_Sm);
+}
+
+.brandInfo {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.brandLogo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  background: var(--Background_Alt);
+  border-radius: 12px;
+  padding: 10px;
+}
+.brandInfo h1 {
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  color: var(--Text_Primary);
+}
+.heroText {
+  color: var(--Text_Secondary);
+  font-size: 14px;
+  margin: 0;
+}
+
+.editBrandBtn {
+  background: var(--Background_Alt);
+  color: var(--Text_Primary);
+  border: 1px solid var(--Border_Color);
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.editBrandBtn:hover {
+  border-color: var(--Primary_Color);
+  color: var(--Primary_Color);
+}
+
+.divider {
+  border: 0;
+  height: 1px;
+  background: var(--Border_Color);
+  margin: 40px 0;
+}
+
+/* Devices Section */
+.devicesSection {
+  margin-top: 20px;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.sectionHeader h2 {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  color: var(--Text_Primary);
+}
+
+.actionGroup {
+  display: flex;
+  gap: 10px;
+}
+
+.secondaryBtn {
+  background: white;
+  border: 1px solid var(--Border_Color);
+  color: var(--Text_Primary);
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+.secondaryBtn:hover {
+  background: var(--Background_Alt);
+  border-color: var(--Primary_Color);
+  color: var(--Primary_Color);
+}
+
+.addDeviceBtn {
+  background: var(--Primary_Color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  box-shadow: var(--Shadow_Sm);
+}
+.addDeviceBtn:hover {
+  background: var(--Primary_Hover);
+}
+
+.uploadWrapper {
+  position: relative;
+}
+.hiddenInput {
+  display: none;
+}
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Grid */
+.deviceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.deviceCard {
+  background: var(--Surface_Card);
+  border: 1px solid var(--Border_Color);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.deviceCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--Shadow_Md);
+}
+
+.deviceImg {
+  width: 100%;
+  height: 120px;
+  object-fit: contain;
+  margin-bottom: 12px;
+}
+.deviceCard h3 {
+  font-size: 16px;
+  margin: 0 0 4px 0;
+  color: var(--Text_Primary);
+}
+.deviceCard p {
+  font-size: 11px;
+  color: var(--Text_Secondary);
+  margin: 0 0 16px 0;
+  text-transform: uppercase;
+  font-weight: 600;
+  background: var(--Background_Alt);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.deviceActions {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  margin-top: auto;
+}
+.deviceActions button {
+  flex: 1;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12px;
+  transition: all 0.2s;
+  background: var(--Background_Alt);
+  color: var(--Text_Secondary);
+}
+.deviceActions button:hover {
+  background: var(--Border_Color);
+  color: var(--Text_Primary);
+}
+
+.servicesBtn {
+  background: #eff6ff !important;
+  color: #2563eb !important;
+  font-weight: 600;
+  flex: 2 !important;
+}
+.servicesBtn:hover {
+  background: #2563eb !important;
+  color: white !important;
+}
+
+.deleteBtn:hover {
+  background: #fee2e2 !important;
+  color: #dc2626 !important;
+}
+
+.emptyState {
+  text-align: center;
+  color: var(--Text_Secondary);
+  padding: 40px;
+  background: var(--Background_Alt);
+  border-radius: 12px;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .brandSection {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+  }
+  .brandInfo {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .sectionHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .actionGroup {
+    flex-direction: column;
+  }
+}

@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { openModal } from "../../redux/slices/modalSlice";
 import { motion } from "framer-motion";
 import { catalogService } from "../../services/catalogService";
-import { getImageUrl } from "../../utils/imageHelper";
+import { getImageUrl } from "../../utils/imageHelper"; // <--- Now uses the fixed file
 import {
   Smartphone,
   Battery,
@@ -42,8 +42,11 @@ const ModelRepairPage = () => {
   const location = useLocation();
   const dispatch = useDispatch();
 
-  // Retrieve model details passed from previous page
+  // 1. Get Model Data from Navigation State
   const modelData = location.state?.model;
+
+  // 2. Safe Fallback Variables
+  // We use the helper to process the image string (Base64/URL)
   const deviceImage = getImageUrl(modelData?.image);
   const deviceName = modelData?.name || "Device Repair";
 
@@ -60,7 +63,6 @@ const ModelRepairPage = () => {
       try {
         const response = await catalogService.getServices(deviceId);
         if (response && response.data) {
-          // --- Map API Data to UI format ---
           const mappedData = response.data.map((s) => ({
             id: s._id,
             title: s.title,
@@ -69,7 +71,6 @@ const ModelRepairPage = () => {
             originalPrice: s.originalPrice || 0,
             discount: s.discount === "0%" ? null : s.discount,
             isActive: s.isActive ?? true,
-            // Add icon for UI display only
             icon: getServiceMetadata(s.title).icon,
           }));
           setServices(mappedData);
@@ -103,18 +104,15 @@ const ModelRepairPage = () => {
         }).format(price)
       : "Contact for Price";
 
-  // --- DISPATCH TO MODAL (FIXED) ---
   const handleGetQuote = () => {
-    // 1. SANITIZE: Remove 'icon' (React Element) from data before sending to Redux
     const sanitizedServices = cart.map((item) => {
-      const { icon, ...rest } = item; // Destructure to exclude icon
+      const { icon, ...rest } = item;
       return rest;
     });
 
     dispatch(
       openModal({
-        type: "booking", // Matches 'activeModal' in RenderModal
-        // IMPORTANT: Use 'modalData' because that is what modalSlice expects
+        type: "booking",
         modalData: {
           deviceModel: deviceName,
           selectedServices: sanitizedServices,
@@ -137,14 +135,33 @@ const ModelRepairPage = () => {
         {/* Header */}
         <div className={styles.header}>
           <div className={styles.modelHeader}>
-            <img
-              src={deviceImage}
-              alt={deviceName}
-              className={styles.modelImage}
-              onError={(e) =>
-                (e.target.src = "https://via.placeholder.com/150")
-              }
-            />
+            {/* Added container to control image size strictly */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: "16px",
+                background: "white",
+                borderRadius: "12px",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+              }}
+            >
+              <img
+                src={deviceImage}
+                alt={deviceName}
+                className={styles.modelImage}
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                  objectFit: "contain",
+                }}
+                onError={(e) =>
+                  (e.target.src =
+                    "https://via.placeholder.com/150?text=No+Image")
+                }
+              />
+            </div>
             <h1 className={styles.modelTitle}>{deviceName}</h1>
           </div>
         </div>
@@ -165,7 +182,6 @@ const ModelRepairPage = () => {
                     whileHover={{ y: -3 }}
                     onClick={() => toggleService(service)}
                   >
-                    {/* Discount Badge */}
                     {service.discount && (
                       <span className={styles.discountBadge}>
                         {service.discount} OFF
@@ -173,21 +189,14 @@ const ModelRepairPage = () => {
                     )}
 
                     <div className={styles.cardBody}>
-                      {/* Icon */}
                       <div className={styles.iconBox}>{service.icon}</div>
-
-                      {/* Text Content */}
                       <div className={styles.details}>
                         <h4 className={styles.serviceTitle}>{service.title}</h4>
-
-                        {/* Description added here */}
                         {service.description && (
                           <p className={styles.serviceDesc}>
                             {service.description}
                           </p>
                         )}
-
-                        {/* Price Section */}
                         <div className={styles.priceRow}>
                           <span className={styles.price}>
                             {formatPrice(service.price)}
@@ -201,7 +210,6 @@ const ModelRepairPage = () => {
                       </div>
                     </div>
 
-                    {/* Selection Indicator */}
                     <div className={styles.cardFooter}>
                       <button
                         className={`${styles.addBtn} ${
@@ -223,11 +231,10 @@ const ModelRepairPage = () => {
             </div>
           </div>
 
-          {/* Quote Section (Sticky) */}
+          {/* Quote Section */}
           <div className={styles.rightColumn}>
             <div className={styles.priceCard}>
               <h3 className={styles.priceTitle}>Estimated Quote</h3>
-
               {cart.length === 0 ? (
                 <p className={styles.emptyCartMsg}>No services selected.</p>
               ) : (
@@ -240,12 +247,10 @@ const ModelRepairPage = () => {
                   ))}
                 </div>
               )}
-
               <div className={styles.billRow}>
                 <span>Total</span>
                 <span>{formatPrice(total)}</span>
               </div>
-
               <button
                 className={styles.bookRepairBtn}
                 onClick={handleGetQuote}

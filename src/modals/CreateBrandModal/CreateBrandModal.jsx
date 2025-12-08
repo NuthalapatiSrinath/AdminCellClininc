@@ -1,20 +1,20 @@
-import React, { useState } from "react";
-import { X, Loader2 } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { X, Loader2, UploadCloud } from "lucide-react";
 import styles from "./CreateBrandModal.module.css";
 import { catalogService } from "../../services/catalogService";
 
-const CreateBrandModal = ({ close, onSuccess }) => {
+// Added 'initialData' prop to support Editing
+const CreateBrandModal = ({ close, onSuccess, initialData = null }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const [formData, setFormData] = useState({
-    name: "",
-    image: "",
-    title: "",
-    subtitle: "",
-    heroText: "",
-    heroDesc: "",
-  });
+  // Initialize state with existing data if editing
+  const [name, setName] = useState(initialData?.name || "");
+  const [heroText, setHeroText] = useState(initialData?.heroText || "");
+  const [heroDesc, setHeroDesc] = useState(initialData?.heroDesc || "");
+  const [imageFile, setImageFile] = useState(null);
+
+  const isEditMode = !!initialData;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,23 +22,38 @@ const CreateBrandModal = ({ close, onSuccess }) => {
     setError("");
 
     try {
-      await catalogService.createBrand(formData);
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("heroText", heroText);
+      formData.append("heroDesc", heroDesc);
+
+      if (imageFile) {
+        formData.append("image", imageFile);
+      }
+
+      if (isEditMode) {
+        // --- UPDATE ---
+        await catalogService.updateBrand(initialData._id, formData);
+        if (onSuccess) onSuccess("Brand Updated Successfully!");
+      } else {
+        // --- CREATE ---
+        if (!imageFile) throw new Error("Please select a logo image");
+        await catalogService.createBrand(formData);
+        if (onSuccess) onSuccess("Brand Created Successfully!");
+      }
+
       setLoading(false);
-      // Trigger the success callback passed from AdminPage
-      if (onSuccess) onSuccess("Brand Created Successfully!");
-      close(); // Close the modal via Redux dispatch
+      close();
     } catch (err) {
       setLoading(false);
-      setError(
-        err.response?.data?.message || err.message || "Failed to create brand"
-      );
+      setError(err.response?.data?.message || err.message || "Failed");
     }
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h3>Add New Brand</h3>
+        <h3>{isEditMode ? "Edit Brand" : "Add New Brand"}</h3>
         <button onClick={close} className={styles.closeBtn}>
           <X size={22} />
         </button>
@@ -53,45 +68,61 @@ const CreateBrandModal = ({ close, onSuccess }) => {
             <input
               required
               placeholder="e.g. Apple"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
           </div>
 
           <div className={styles.inputGroup}>
-            <label>Logo Image URL *</label>
-            <input
-              required
-              placeholder="https://..."
-              value={formData.image}
-              onChange={(e) =>
-                setFormData({ ...formData, image: e.target.value })
-              }
-            />
+            <label>
+              Brand Logo {isEditMode && "(Leave empty to keep current)"}
+            </label>
+            <div className={styles.fileBox}>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setImageFile(e.target.files[0])}
+                className={styles.hiddenInput}
+                id="brand-file"
+                required={!isEditMode} // Required only for new brands
+              />
+              <label htmlFor="brand-file" className={styles.fileLabel}>
+                <UploadCloud size={20} />
+                <span>
+                  {imageFile
+                    ? imageFile.name
+                    : isEditMode
+                    ? "Change Image"
+                    : "Upload Image"}
+                </span>
+              </label>
+            </div>
+            {/* Show preview if editing and no new file selected */}
+            {isEditMode && !imageFile && initialData.image && (
+              <img
+                src={initialData.image}
+                alt="Current"
+                style={{ height: 40, objectFit: "contain", marginTop: 5 }}
+              />
+            )}
           </div>
 
           <div className={styles.inputGroup}>
             <label>Hero Heading</label>
             <input
               placeholder="e.g. EXPERT IPHONE REPAIR"
-              value={formData.heroText}
-              onChange={(e) =>
-                setFormData({ ...formData, heroText: e.target.value })
-              }
+              value={heroText}
+              onChange={(e) => setHeroText(e.target.value)}
             />
           </div>
 
           <div className={styles.inputGroup}>
             <label>Hero Description</label>
             <textarea
-              placeholder="Description for the hero section..."
+              placeholder="Description..."
               rows={3}
-              value={formData.heroDesc}
-              onChange={(e) =>
-                setFormData({ ...formData, heroDesc: e.target.value })
-              }
+              value={heroDesc}
+              onChange={(e) => setHeroDesc(e.target.value)}
             />
           </div>
         </div>
@@ -99,6 +130,8 @@ const CreateBrandModal = ({ close, onSuccess }) => {
         <button type="submit" className={styles.saveBtn} disabled={loading}>
           {loading ? (
             <Loader2 className={styles.spin} size={20} />
+          ) : isEditMode ? (
+            "Update Brand"
           ) : (
             "Save Brand"
           )}

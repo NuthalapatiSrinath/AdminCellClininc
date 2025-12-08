@@ -2,18 +2,22 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link, NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
 import { catalogService } from "../../services/catalogService";
-import { getImageUrl } from "../../utils/imageHelper"; // Import Helper
 import styles from "./RepairPage.module.css";
-import {
-  Search,
-  // Smartphone,
-  // Battery,
-  // Zap,
-  // Camera,
-  // Disc,
-  // Headphones,
-  // Settings,
-} from "lucide-react";
+import { Search, Loader2 } from "lucide-react";
+
+// --- Helper to fix image URLs ---
+const getImageUrl = (img) => {
+  if (!img) return "https://via.placeholder.com/150?text=No+Image";
+
+  // 1. If it's a Base64 string (from manual upload)
+  if (img.startsWith("data:")) return img;
+
+  // 2. If it's an external link (http/https)
+  if (img.startsWith("http")) return img;
+
+  // 3. If it's a local path (starts with /)
+  return img;
+};
 
 const RepairPage = () => {
   const { brandName } = useParams();
@@ -24,7 +28,7 @@ const RepairPage = () => {
   const [brandId, setBrandId] = useState(null);
   const [displayName, setDisplayName] = useState(brandName);
 
-  // 1. Find Brand ID
+  // 1. Find Brand ID based on Name
   useEffect(() => {
     const findBrandId = async () => {
       try {
@@ -45,14 +49,13 @@ const RepairPage = () => {
     if (brandName) findBrandId();
   }, [brandName]);
 
-  // 2. Fetch Devices
+  // 2. Fetch Devices for that Brand
   useEffect(() => {
     const fetchDevices = async () => {
       if (!brandId) return;
       setLoading(true);
       try {
         const response = await catalogService.getDevices(brandId);
-        console.log("🟢 [RepairPage] Devices:", response.data);
         if (response && response.data) {
           setModels(response.data);
         }
@@ -95,13 +98,17 @@ const RepairPage = () => {
 
           <div className={styles.modelGrid}>
             {loading ? (
-              <p>Loading models...</p>
+              <div
+                style={{ width: "100%", textAlign: "center", padding: "40px" }}
+              >
+                <Loader2 className={styles.spin} size={32} />
+              </div>
             ) : filteredModels.length > 0 ? (
               filteredModels.map((model, idx) => (
                 <NavLink
                   key={model._id}
                   to={`/repair/model/${model._id}`}
-                  state={{ model: model }} // Pass full object including image
+                  state={{ model: model }} // Pass data to next page
                   className={styles.modelLink}
                 >
                   <motion.div
@@ -111,22 +118,26 @@ const RepairPage = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.05 }}
                   >
-                    <img
-                      // FIX: Use imageHelper and check 'image' property
-                      src={getImageUrl(model.image)}
-                      alt={model.name}
-                      className={styles.modelImg}
-                      onError={(e) =>
-                        (e.target.src =
-                          "https://via.placeholder.com/150?text=No+Image")
-                      }
-                    />
-                    <p>{model.name}</p>
+                    <div className={styles.imageWrapper}>
+                      <img
+                        src={getImageUrl(model.image)}
+                        alt={model.name}
+                        className={styles.modelImg}
+                        loading="lazy"
+                        onError={(e) =>
+                          (e.target.src =
+                            "https://via.placeholder.com/150?text=No+Image")
+                        }
+                      />
+                    </div>
+                    <p className={styles.modelName}>{model.name}</p>
                   </motion.div>
                 </NavLink>
               ))
             ) : (
-              <p className={styles.noModels}>No models found.</p>
+              <p className={styles.noModels}>
+                No models found matching "{searchQuery}"
+              </p>
             )}
           </div>
         </div>

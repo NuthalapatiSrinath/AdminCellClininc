@@ -7,7 +7,6 @@ import BestInClassSection from "../../components/BestInClassSection/BestInClassS
 import { catalogService } from "../../services/catalogService";
 
 // --- Configuration: Brand Styles & Colors ---
-// This ensures we use YOUR specific colors/styles, ignoring API images.
 const BRAND_STYLES = {
   apple: { color: "#000000", style: "apple" },
   xiaomi: { label: "mi", color: "#FF6900", style: "xiaomi" },
@@ -26,14 +25,23 @@ const BRAND_STYLES = {
   honor: { color: "#00E0FF", style: "gradient" },
 };
 
-// --- Special Cases: Keep Images for these ONLY ---
+// --- Special Cases ---
 const SPECIAL_IMAGES = {
   ipad: { img: "/images/services/ipad.webp", style: "image" },
   iwatch: { img: "/images/services/smartwatch.webp", style: "image" },
   macbook: { img: "/images/services/macbook.webp", style: "image" },
 };
 
-// --- Animation Variants ---
+// --- EXCLUDED BRANDS ---
+const EXCLUDED_BRANDS = [
+  "ipad",
+  "iwatch",
+  "smartwatch",
+  "macbook",
+  "laptop",
+  "tablet",
+];
+
 const cardVariants = {
   hidden: { opacity: 0, scale: 0.9 },
   visible: { opacity: 1, scale: 1, transition: { duration: 0.2 } },
@@ -51,32 +59,43 @@ const MobileRepairPage = () => {
       try {
         const response = await catalogService.getBrands();
         if (response && response.data) {
-          // Process API data to match your requested look
-          const processedBrands = response.data.map((apiBrand) => {
-            const key = apiBrand.name.toLowerCase().replace(/\s/g, "");
+          const processedBrands = response.data
+            .filter((apiBrand) => {
+              const key = apiBrand.name.toLowerCase().replace(/\s/g, "");
+              return !EXCLUDED_BRANDS.includes(key);
+            })
+            .map((apiBrand) => {
+              const key = apiBrand.name.toLowerCase().replace(/\s/g, "");
 
-            // 1. Check if it's a Special Image Item (iPad, MacBook, etc.)
-            if (SPECIAL_IMAGES[key]) {
+              // 1. Check Special Images (Static)
+              if (SPECIAL_IMAGES[key]) {
+                return {
+                  id: apiBrand._id,
+                  name: apiBrand.name,
+                  ...SPECIAL_IMAGES[key],
+                };
+              }
+
+              const config =
+                BRAND_STYLES[key] || BRAND_STYLES[apiBrand.name.toLowerCase()];
+
+              // 2. CHECK IMAGE SOURCE
+              // Fix: Allow 'http' (Excel links) OR 'data:' (Manual Uploads)
+              const hasValidImage =
+                apiBrand.image &&
+                (apiBrand.image.startsWith("http") ||
+                  apiBrand.image.startsWith("data:"));
+
               return {
                 id: apiBrand._id,
                 name: apiBrand.name,
-                ...SPECIAL_IMAGES[key], // Apply local image & style
+                // Use the API image if valid, otherwise null (triggers text fallback)
+                img: hasValidImage ? apiBrand.image : null,
+                style: hasValidImage ? "image" : config?.style || "sans",
+                color: config?.color || "#124191",
+                label: config?.label || apiBrand.name,
               };
-            }
-
-            // 2. Otherwise, find the matching Color/Style Config
-            // (And explicitly IGNORE the apiBrand.image)
-            const config =
-              BRAND_STYLES[key] || BRAND_STYLES[apiBrand.name.toLowerCase()];
-
-            return {
-              id: apiBrand._id,
-              name: apiBrand.name,
-              color: config?.color || "#124191", // Default to Blue if unknown
-              style: config?.style || "sans", // Default style
-              label: config?.label || apiBrand.name,
-            };
-          });
+            });
 
           setBrands(processedBrands);
         }
@@ -90,7 +109,6 @@ const MobileRepairPage = () => {
     fetchBrands();
   }, []);
 
-  // Filter logic
   const filteredBrands = brands.filter((brand) =>
     brand.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -98,7 +116,6 @@ const MobileRepairPage = () => {
   return (
     <div className={styles.pageWrapper}>
       <div className={styles.container}>
-        {/* --- Header --- */}
         <div className={styles.header}>
           <div>
             <h1 className={styles.pageTitle}>Repair Your Mobile Phone</h1>
@@ -118,7 +135,6 @@ const MobileRepairPage = () => {
 
         <h3 className={styles.sectionTitle}>Select Brand</h3>
 
-        {/* --- Brands Grid --- */}
         {loading ? (
           <div style={{ textAlign: "center", padding: "40px", width: "100%" }}>
             <Loader2
@@ -144,11 +160,17 @@ const MobileRepairPage = () => {
                   whileHover={{ y: -5, borderColor: "var(--Primary_Color)" }}
                 >
                   <div className={styles.logoArea}>
-                    {brand.style === "image" ? (
+                    {/* Logic: If style is 'image', show img tag. Else show Text/CSS logo */}
+                    {brand.style === "image" && brand.img ? (
                       <img
                         src={brand.img}
                         alt={brand.name}
                         className={styles.brandImage}
+                        style={{
+                          maxWidth: "60px",
+                          maxHeight: "60px",
+                          objectFit: "contain",
+                        }}
                       />
                     ) : (
                       <div
@@ -164,7 +186,7 @@ const MobileRepairPage = () => {
                         {brand.style === "google" && (
                           <span className={styles.googleG}>G</span>
                         )}
-                        {/* Default Label */}
+
                         {!["moto", "oneplus", "google"].includes(brand.style) &&
                           (brand.label ? brand.label : brand.name)}
                       </div>
@@ -189,7 +211,6 @@ const MobileRepairPage = () => {
           </div>
         )}
 
-        {/* --- Content Section 2 (Why Us) --- */}
         <div className={styles.whyUsWrapper}>
           <BestInClassSection />
         </div>

@@ -9,22 +9,30 @@ import MainModal from "../MainModal/MainModal";
 import LoginModal from "../LoginModal/LoginModal";
 import FindModelModal from "../FindModelModal/FindModelModal";
 import BookingModal from "../BookingModal/BookingModal";
+import QuickBookingModal from "../QuickBookingModal/QuickBookingModal";
 
-// --- Import NEW Modals ---
+// --- Import Admin Modals ---
 import CreateBrandModal from "../CreateBrandModal/CreateBrandModal";
 import CreateDeviceModal from "../CreateDeviceModal/CreateDeviceModal";
-
+import CreateServiceModal from "../CreateServiceModal/CreateServiceModal";
+import ManageServicesModal from "../ManageServicesModal/ManageServicesModal"; // <--- NEW IMPORT
+import EditOrderModal from "../EditOrderModal/EditOrderModal";
 const RenderModal = () => {
   const dispatch = useDispatch();
-  const { type, data } = useSelector((state) => state.modal);
+  const { type, modalData } = useSelector((state) => state.modal);
 
   const MODAL_COMPONENTS = {
     LOGIN: LoginModal,
     FIND_MODEL: FindModelModal,
     BOOKING: BookingModal,
-    // Add New Types Here
+    QUICK_BOOKING: QuickBookingModal,
+
+    // --- Admin Modals ---
     CREATE_BRAND: CreateBrandModal,
     CREATE_DEVICE: CreateDeviceModal,
+    CREATE_SERVICE: CreateServiceModal,
+    MANAGE_SERVICES: ManageServicesModal,
+    EDIT_ORDER: EditOrderModal, // <--- REGISTERED HERE
   };
 
   const ActiveComponent = type
@@ -45,8 +53,11 @@ const RenderModal = () => {
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
           >
-            {/* Pass close handler and data props */}
-            <ActiveComponent {...data} close={handleClose} />
+            <ActiveComponent
+              {...modalData}
+              close={handleClose}
+              onClose={handleClose}
+            />
           </motion.div>
         )}
       </AnimatePresence>

@@ -37,15 +37,23 @@
   margin-bottom: 40px;
 }
 
-/* --- GRID --- */
+/* --- GRID FIX --- */
 .grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  /* minmax(0, 1fr) ensures columns NEVER expand due to long text */
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 20px;
-  min-height: 80px; /* prevents collapse while loading */
+  min-height: 80px;
 }
 
 /* --- CARD --- */
+.cardLink {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+}
+
 .card {
   background-color: var(--Surface_Card);
   /* Perfect Square */
@@ -63,9 +71,8 @@
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
-  overflow: hidden;
+  overflow: hidden; /* Keeps everything inside the rounded corners */
 
-  /* ensure visible even if motion tries to hide */
   opacity: 1;
   visibility: visible;
   transform: none;
@@ -76,37 +83,51 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
-/* cardLink wrapper so NavLink doesn't collapse */
-.cardLink {
-  display: block;
-  text-decoration: none;
-  color: inherit;
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
 }
 
-/* --- Text Logo Styles --- */
+/* --- Text Logo Styles (UPDATED FOR FULL VISIBILITY) --- */
 .brandText {
-  font-size: 1.3rem;
+  font-size: 1.1rem; /* Slightly smaller to fit more text */
   display: flex;
+  flex-direction: column; /* Allows stacking if you add icons later */
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  line-height: 1;
-  transition: transform 0.2s ease;
-  white-space: nowrap;
+  text-align: center; /* Center align multi-line text */
+  gap: 4px;
+  line-height: 1.3; /* Breathing room for multiple lines */
 
-  /* ensure visible */
+  /* --- KEY FIXES FOR WRAPPING --- */
+  white-space: normal; /* Allows text to wrap to next line */
+  word-wrap: break-word; /* Breaks long words like NKKKK... */
+  overflow-wrap: anywhere; /* Ensures it fits inside the box */
+
+  width: 100%;
+  padding: 0 8px; /* Adds padding so text doesn't touch the edge */
+
+  transition: transform 0.2s ease;
   opacity: 1;
   visibility: visible;
   transform: none;
 }
 
 .card:hover .brandText {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 /* --- Specific Brand Styles --- */
 
-/* Apple: Simple, sleek font */
+.gradient {
+  font-weight: 800;
+  font-family: sans-serif;
+  background: -webkit-linear-gradient(45deg, #00e0ff, #0066ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+
 .apple {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif;
@@ -118,7 +139,6 @@
   color: #fff !important;
 }
 
-/* Xiaomi: The Orange Box */
 .xiaomi {
   background-color: #ff6900;
   color: white !important;
@@ -130,48 +150,42 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-bottom: 3px; /* visual adjustment */
+  padding-bottom: 3px;
 }
 
-/* Standard Sans */
 .sans {
   font-weight: 700;
   font-family: "Verdana", sans-serif;
   letter-spacing: 0.5px;
 }
-
-/* Bold Black */
 .bold {
   font-weight: 800;
   font-family: "Arial Black", sans-serif;
   letter-spacing: -0.5px;
 }
-
 .lowercase {
   font-weight: 500;
   font-size: 1.8rem;
 }
-
 .lowercase-bold {
   font-weight: 700;
   font-size: 1.8rem;
   letter-spacing: -1px;
 }
 
-/* NOTHING Phone */
 .dotted {
   font-family: "Courier New", monospace;
   font-weight: 400;
   letter-spacing: 2px;
   text-transform: uppercase;
   border-bottom: 2px dotted currentColor;
+  word-break: break-all; /* Special fix for dotted style */
 }
 :global([data-theme="dark"]) .dotted {
   color: #fff !important;
   border-bottom-color: white;
 }
 
-/* OnePlus */
 .oneplus {
   font-weight: 800;
   font-family: sans-serif;
@@ -185,9 +199,9 @@
   font-weight: 900;
   border-radius: 2px;
   margin-right: 5px;
+  display: inline-block; /* Helps with wrapping alignment */
 }
 
-/* Motorola */
 .moto {
   font-weight: 700;
   letter-spacing: -0.5px;
@@ -210,18 +224,19 @@
   font-style: italic;
   font-family: serif;
   margin-right: 6px;
+  display: inline-flex; /* Helps with wrapping alignment */
 }
 
 /* --- Responsive --- */
 @media (max-width: 1200px) {
   .grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 768px) {
   .grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
   .title {
     font-size: 24px;
@@ -230,15 +245,40 @@
 
 @media (max-width: 480px) {
   .grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
   }
 }
 
-/* Force visible in case motion or styles cause flicker */
+/* Force visible */
 .card,
 .brandText {
   opacity: 1 !important;
   visibility: visible !important;
   transform: none !important;
+}
+/* Xiaomi: The Orange Box */
+.xiaomi {
+  background-color: #ff6900;
+  color: white !important;
+  font-weight: 700;
+  font-size: 1.4rem; /* Adjusted for better fit */
+
+  /* Force Square Shape */
+  width: 52px !important; /* !important stops it from stretching to 100% */
+  height: 42px;
+  min-width: 42px; /* Prevents shrinking */
+
+  border-radius: 10px; /* Smoother corners (Squircle) */
+
+  /* Perfect Centering */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto; /* Centers the box inside the card */
+
+  /* Text Alignment */
+  padding-bottom: 3px; /* Visual adjustment to lift 'mi' to optical center */
+  line-height: 1;
+  font-family: sans-serif; /* Ensures clean look */
 }

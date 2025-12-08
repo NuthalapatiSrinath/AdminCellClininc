@@ -1,15 +1,15 @@
-// src/utils/imageHelper.js
+export const getImageUrl = (img) => {
+  if (!img) return "https://via.placeholder.com/150?text=No+Image";
 
-export const getImageUrl = (path) => {
-  if (!path) return "https://via.placeholder.com/150?text=No+Image";
+  // 1. Base64 (Manual Uploads on Vercel)
+  if (img.startsWith("data:")) return img;
 
-  // 1. If it's a full URL (like your Unsplash links), return it directly
-  if (path.startsWith("http") || path.startsWith("https")) {
-    return path;
-  }
+  // 2. External Links (Excel Uploads)
+  if (img.startsWith("http")) return img;
 
-  // 2. If it's a relative path (from your uploads folder), prepend backend URL
-  // CHANGE THIS to your actual backend URL if you have local uploads
-  const API_BASE_URL = "http://localhost:4000";
-  return `${API_BASE_URL}${path.startsWith("/") ? "" : "/"}${path}`;
+  // 3. Local Uploads (Localhost)
+  if (img.startsWith("/")) return img;
+
+  // 4. Fallback for relative paths without slash
+  return `/${img}`;
 };

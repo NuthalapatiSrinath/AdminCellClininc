@@ -1,29 +1,27 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { toggleTheme } from "../../redux/slices/themeSlice";
+// Removed toggleTheme import
 import { openModal } from "../../redux/slices/modalSlice";
 import { logout } from "../../redux/slices/authSlice";
 import {
   MapPin,
   Mail,
   CalendarDays,
-  Sun,
-  Moon,
   Menu,
   X,
   User,
   LogOut,
   Package,
   ChevronDown,
-} from "lucide-react";
+} from "lucide-react"; // Removed Sun, Moon
 import styles from "./TopBar.module.css";
 
 const TopBar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const theme = useSelector((state) => state.theme.mode);
+  // Removed theme state selector
 
   // Get Auth State
   const { isAuthenticated, user } = useSelector((state) => state.auth);
@@ -87,10 +85,10 @@ const TopBar = () => {
                 </a>
               </div>
 
-              {/* Added onClick to navigate to Services */}
+              {/* UPDATED: Now opens Modal instead of navigating */}
               <button
                 className={styles.bookNowBtnSmall}
-                onClick={() => navigate("/services")}
+                onClick={() => dispatch(openModal({ type: "QUICK_BOOKING" }))}
               >
                 <CalendarDays size={14} />
                 <span>Book Now</span>
@@ -149,13 +147,7 @@ const TopBar = () => {
 
             {/* Actions */}
             <div className={styles.actions}>
-              <button
-                onClick={() => dispatch(toggleTheme())}
-                className={styles.themeToggle}
-                aria-label="Toggle Theme"
-              >
-                {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
-              </button>
+              {/* REMOVED THEME TOGGLE BUTTON HERE */}
 
               {/* --- AUTH BUTTON SECTION --- */}
               {isAuthenticated ? (
@@ -211,7 +203,7 @@ const TopBar = () => {
           </div>
         </div>
 
-        {/* --- Mobile Menu (Moved inside mainNav relative container) --- */}
+        {/* --- Mobile Menu --- */}
         <div
           className={`${styles.mobileMenuContainer} ${
             isMenuOpen ? styles.menuOpen : ""

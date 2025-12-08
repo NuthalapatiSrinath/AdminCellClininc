@@ -4,7 +4,7 @@
   min-height: 100vh;
 }
 .container {
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 .pageTitle {
@@ -18,6 +18,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
+  margin-bottom: 50px;
 }
 
 /* Cards */
@@ -27,46 +28,65 @@
   border-radius: 12px;
   border: 1px solid var(--Border_Color);
   box-shadow: var(--Shadow_Sm);
+  display: flex;
+  flex-direction: column;
 }
-.card h2 {
+.cardHeader h2 {
   display: flex;
   align-items: center;
   gap: 10px;
   font-size: 18px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   color: var(--Text_Primary);
 }
-.card p {
-  font-size: 14px;
+.cardHeader p {
+  font-size: 13px;
   color: var(--Text_Secondary);
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 /* Buttons */
 .btnGroup {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 .actionBtn {
   flex: 1;
+  min-width: 100px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px;
+  gap: 10px;
+  padding: 16px;
   border: 1px solid var(--Border_Color);
-  background: var(--Background_Alt);
-  border-radius: 8px;
+  background: var(--Background_Main);
+  border-radius: 12px;
   cursor: pointer;
-  font-weight: 600;
   transition: all 0.2s;
   color: var(--Text_Primary);
 }
+.iconBox {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #eff6ff;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .actionBtn:hover {
-  border-color: var(--Primary_Color);
-  color: var(--Primary_Color);
-  background: var(--Surface_Card);
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+.actionBtn:hover .iconBox {
+  background: #2563eb;
+  color: white;
+}
+.actionBtn span {
+  font-size: 13px;
+  font-weight: 600;
 }
 
 /* Upload Section */
@@ -74,15 +94,43 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  margin-top: auto;
 }
 .fileInputWrapper {
+  position: relative;
+  width: 100%;
+}
+.fileInput {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+.fileLabel {
   border: 2px dashed var(--Border_Color);
   padding: 20px;
   border-radius: 8px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: var(--Background_Main);
+  transition: border-color 0.2s;
 }
-.fileInput {
-  width: 100%;
+.fileInput:hover + .fileLabel {
+  border-color: #2563eb;
+  background: #f8fafc;
+}
+.uploadIcon {
+  color: var(--Text_Muted);
+}
+.fileName {
+  font-weight: 600;
+  color: #2563eb;
+  word-break: break-all;
 }
 
 .uploadActions {
@@ -102,10 +150,11 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+  font-size: 13px;
 }
 .uploadBtn {
   flex: 2;
-  background: var(--Primary_Color);
+  background: #2563eb;
   color: white;
   border: none;
   padding: 10px;
@@ -119,91 +168,6 @@
 .uploadBtn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
-}
-
-/* Modal */
-.modalOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-.modal {
-  background: var(--Surface_Card);
-  padding: 30px;
-  border-radius: 16px;
-  width: 500px;
-  position: relative;
-  box-shadow: var(--Shadow_Lg);
-  display: flex;
-  flex-direction: column;
-  max-height: 90vh; /* Prevent overflow */
-}
-.closeBtn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--Text_Muted);
-}
-.modal h3 {
-  margin-bottom: 20px;
-  font-size: 20px;
-  color: var(--Text_Primary);
-}
-
-.scrollArea {
-  overflow-y: auto;
-  padding-right: 10px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-.modal label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--Text_Secondary);
-  margin-bottom: -10px;
-}
-.modal input,
-.modal select,
-.modal textarea {
-  padding: 12px;
-  border: 1px solid var(--Border_Color);
-  border-radius: 8px;
-  background: var(--Background_Main);
-  color: var(--Text_Primary);
-  font-family: inherit;
-  resize: vertical;
-}
-.modal input:focus,
-.modal textarea:focus {
-  border-color: var(--Primary_Color);
-  outline: none;
-}
-
-.saveBtn {
-  background: var(--Success_Color);
-  color: white;
-  border: none;
-  padding: 14px;
-  border-radius: 8px;
-  font-weight: 700;
-  cursor: pointer;
-  width: 100%;
-  font-size: 16px;
 }
 
 /* Status Banner */
@@ -241,13 +205,98 @@
   }
 }
 
+/* Manage Brands Section */
+.brandsSection {
+  margin-top: 40px;
+}
+.brandsSection h3 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: var(--Text_Primary);
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+.emptyText {
+  color: var(--Text_Secondary);
+  font-style: italic;
+}
+
+.brandsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.brandCard {
+  background: var(--Surface_Card);
+  border: 1px solid var(--Border_Color);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: box-shadow 0.2s;
+}
+.brandCard:hover {
+  box-shadow: var(--Shadow_Md);
+}
+
+.brandLogo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  margin-bottom: 15px;
+}
+
+.brandInfo h4 {
+  margin: 0 0 15px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--Text_Primary);
+}
+
+.cardActions {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.editBtn,
+.deleteBtn {
+  flex: 1;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.editBtn {
+  background: #eff6ff;
+  color: #2563eb;
+}
+.editBtn:hover {
+  background: #dbeafe;
+}
+
+.deleteBtn {
+  background: #fef2f2;
+  color: #dc2626;
+}
+.deleteBtn:hover {
+  background: #fee2e2;
+}
+
 /* Mobile */
 @media (max-width: 768px) {
   .grid {
     grid-template-columns: 1fr;
-  }
-  .modal {
-    width: 90%;
-    padding: 20px;
   }
 }
