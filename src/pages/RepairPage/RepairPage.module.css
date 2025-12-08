@@ -12,7 +12,6 @@
   padding: 20px 24px;
 }
 
-/* --- Header --- */
 .header {
   margin-bottom: 40px;
 }
@@ -38,22 +37,12 @@
   color: var(--Primary_Color);
 }
 
-/* --- Model Section --- */
-.modelSection {
-  margin-bottom: 60px;
-}
-
+/* --- Search & Header --- */
 .modelHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-}
-
-.modelHeader h3 {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--Text_Primary);
 }
 
 .searchBox {
@@ -77,10 +66,19 @@
   color: var(--Text_Muted);
 }
 
+/* --- MODEL GRID --- */
 .modelGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 20px;
+  align-items: stretch; /* Cards same height */
+}
+
+.modelLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
 }
 
 .modelCard {
@@ -90,191 +88,81 @@
   padding: 20px;
   text-align: center;
   cursor: pointer;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.2s ease;
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  height: 100%;
+  min-height: 200px;
 }
-.modelImg {
-  width: 80px;
-  height: auto;
+
+.modelCard:hover {
+  border-color: var(--Primary_Color);
+  box-shadow: var(--Shadow_Md);
+  transform: translateY(-4px);
+}
+
+/* --- IMAGE WRAPPER (Fixed Size & Transparent) --- */
+.imageWrapper {
+  width: 140px; /* Fixed Width for the image area */
+  height: 140px; /* Fixed Height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 15px;
+
+  /* NO BACKGROUND COLOR HERE */
+  background-color: transparent;
+
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.modelImg {
+  width: 100%;
+  height: 100%;
+  /* 'contain' ensures the whole image is visible without cropping */
   object-fit: contain;
 }
+
 .modelCard p {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--Text_Primary);
-  margin: 0;
-}
-
-/* --- Brand Hero --- */
-.brandHero {
-  text-align: center;
-  margin-bottom: 60px;
-  padding: 40px;
-  background-color: var(--Background_Alt);
-  border-radius: 16px;
-  border: 1px solid var(--Border_Color);
-}
-.brandHero h2 {
-  font-size: 24px;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-  font-weight: 800;
-}
-.brandHero p {
-  color: var(--Text_Secondary);
-  font-size: 15px;
-}
-
-/* --- Why Us & Services Common --- */
-.whyUs,
-.servicesList {
-  text-align: center;
-  margin-bottom: 80px;
-}
-.servicesHeading {
-  font-size: 24px;
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-.redLine {
-  width: 100%;
-  height: 1px;
-  background: var(--Border_Color);
-  margin: 15px 0 40px;
-  position: relative;
-}
-.redLine::after {
-  content: "";
-  position: absolute;
-  width: 100px;
-  height: 3px;
-  background: var(--Primary_Color);
-  left: 50%;
-  transform: translateX(-50%);
-  top: -1px;
-}
-
-.statsGrid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  text-align: center;
-}
-.statItem h4 {
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-.statItem p {
-  font-size: 13px;
-  color: var(--Text_Secondary);
-}
-
-/* --- SERVICES GRID (Horizontal Layout) --- */
-.servicesGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 Columns side-by-side */
-  gap: 30px;
-  text-align: left;
-}
-
-.serviceCard {
-  display: flex;
-  align-items: flex-start; /* Align top */
-  gap: 24px;
-  background: var(--Surface_Card);
-  padding: 30px;
-  border-radius: 8px; /* Sharper corners like image */
-  box-shadow: var(--Shadow_Sm);
-  border: 1px solid var(--Border_Color);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  min-height: 130px;
-}
-
-/* Icon Wrapper */
-.serviceIcon {
-  flex-shrink: 0;
-  margin-top: 4px; /* Slight adjustment to align with title */
-}
-
-.serviceText {
-  flex: 1;
-}
-
-.serviceText h4 {
-  font-family: var(--Font_Heading);
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 10px;
-  color: var(--Text_Primary);
-}
-
-.serviceText p {
-  font-family: var(--Font_Body);
   font-size: 14px;
-  color: var(--Text_Secondary);
-  line-height: 1.6;
+  font-weight: 700;
+  color: var(--Text_Primary);
   margin: 0;
+  line-height: 1.4;
 }
 
-/* --- Responsive --- */
-@media (max-width: 900px) {
-  .servicesGrid {
-    grid-template-columns: 1fr;
-  } /* Stack on mobile */
-  .statsGrid {
-    grid-template-columns: 1fr 1fr;
+.noModels {
+  text-align: center;
+  color: var(--Text_Muted);
+  grid-column: 1 / -1;
+  padding: 40px;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+  color: var(--Primary_Color);
+}
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
   }
 }
+
 @media (max-width: 480px) {
   .modelGrid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
-  .statsGrid {
-    grid-template-columns: 1fr;
+  .modelCard {
+    padding: 15px;
+    min-height: 180px;
   }
-} /* --- Brand Hero (Updated) --- */
-.brandHero {
-  text-align: center;
-  margin-bottom: 60px;
-  padding: 40px;
-  background-color: var(--Background_Alt);
-  border-radius: 16px;
-  border: 1px solid var(--Border_Color);
-}
-
-.brandHero h2 {
-  font-size: 24px;
-  margin-bottom: 20px;
-  text-transform: uppercase;
-  color: var(--Text_Primary);
-  font-weight: 800;
-}
-
-.brandHero p {
-  color: var(--Text_Secondary);
-  font-size: 15px;
-  line-height: 1.8; /* Better readability for long text */
-  max-width: 900px; /* Allow wider text block */
-  margin: 0 auto;
-  text-align: justify; /* Looks cleaner for blocks */
-  text-align-last: center; /* Centers the last line */
-}
-
-/* --- Services Heading Update --- */
-/* Match the "Get The Following Issues Fixed..." text */
-.servicesHeading {
-  font-family: var(--Font_Heading);
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--Text_Primary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  max-width: 800px;
-  margin: 0 auto 10px auto;
+  .imageWrapper {
+    width: 100px;
+    height: 100px;
+  }
 }
