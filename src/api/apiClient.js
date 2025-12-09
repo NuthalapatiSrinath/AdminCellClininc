@@ -1,7 +1,8 @@
 import axios from "axios";
 
 // Change this to your deployed URL later
-const BASE_URL = "https://cell-clinic-hyderabad-backend-169x.vercel.app/api";
+const BASE_URL = "https://cell-clinic-hyderabad-backend-w9qt.vercel.app/api";
+// const BASE_URL = "http://localhost:5000/api";
 
 const apiClient = axios.create({
   baseURL: BASE_URL,
