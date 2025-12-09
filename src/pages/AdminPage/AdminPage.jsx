@@ -11,9 +11,10 @@ import {
   Loader2,
   Upload,
 } from "lucide-react";
+
 import { backupService } from "../../services/backupService";
 
-// Sub-pages
+// PAGES
 import AdminCatalogPage from "../AdminCatalogPage/AdminCatalogPage";
 import MyOrdersPage from "../MyOrdersPage/MyOrdersPage";
 
@@ -31,55 +32,57 @@ const AdminPage = () => {
     }
   }, [isAuthenticated, dispatch]);
 
-  // --- HANDLER: DOWNLOAD BACKUP ---
+  // ---------------------------
+  // BACKUP
+  // ---------------------------
   const handleDownloadBackup = async () => {
-    if (!window.confirm("Download full website backup (Images + Data)?"))
-      return;
+    if (!window.confirm("Download full backup (Images + Data)?")) return;
 
     setDownloading(true);
     const result = await backupService.downloadFullBackup();
     setDownloading(false);
 
     if (!result.success) {
-      alert("Download failed. Check console.");
+      alert("Backup Failed! Check console.");
     }
   };
 
-  // --- HANDLER: RESTORE DATA ---
+  // ---------------------------
+  // RESTORE
+  // ---------------------------
   const handleRestore = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
     if (
-      !window.confirm(
-        "⚠️ WARNING: This will DELETE all current data and replace it with the backup. Are you sure?"
-      )
+      !window.confirm("⚠ WARNING: This will delete all current data. Continue?")
     ) {
-      e.target.value = null; // Reset input
+      e.target.value = null;
       return;
     }
 
     setRestoring(true);
     try {
       const res = await backupService.uploadRestoreFile(file);
-      alert(res.message || "Restore Successful!");
-      window.location.reload(); // Refresh page to see new data
+      alert(res.message || "Restore successful!");
+      window.location.reload();
     } catch (err) {
-      console.error(err);
-      alert("Restore Failed. Check console for details.");
+      alert("Restore failed. Check console.");
     } finally {
       setRestoring(false);
-      e.target.value = null; // Reset input
+      e.target.value = null;
     }
   };
 
-  // --- ACCESS DENIED VIEW ---
+  // ---------------------------
+  // AUTH CHECK
+  // ---------------------------
   if (!isAuthenticated) {
     return (
       <div style={styles.deniedContainer}>
         <ShieldAlert size={64} color="#dc2626" />
         <h2>Access Restricted</h2>
-        <p>You must be logged in as an Admin.</p>
+        <p>You must be logged in as Admin.</p>
         <button
           onClick={() => dispatch(openModal({ type: "login" }))}
           style={styles.loginBtn}
@@ -90,49 +93,43 @@ const AdminPage = () => {
     );
   }
 
-  // --- DASHBOARD VIEW ---
+  // ---------------------------
+  // UI
+  // ---------------------------
   return (
     <div style={styles.dashboardWrapper}>
       {/* TOP BAR */}
       <div style={styles.topBar}>
         <div>
           <h1 style={styles.heading}>Admin Dashboard</h1>
-          <p style={styles.subHeading}>Welcome, {user?.email || "Admin"}</p>
+          <p style={styles.subHeading}>Welcome, {user?.email}</p>
         </div>
 
         <div style={{ display: "flex", gap: "12px" }}>
-          {/* 1. BACKUP BUTTON */}
+          {/* BACKUP */}
           <button
             onClick={handleDownloadBackup}
             style={styles.backupBtn}
             disabled={downloading || restoring}
-            title="Download Backup ZIP"
           >
             {downloading ? (
               <Loader2 className="spin" size={18} />
             ) : (
               <DownloadCloud size={18} />
             )}
-            <span>Backup</span>
+            Backup
           </button>
 
-          {/* 2. RESTORE BUTTON (Hidden Input Trick) */}
+          {/* RESTORE */}
           <div style={{ position: "relative" }}>
             <input
               type="file"
               accept=".zip"
               onChange={handleRestore}
-              style={{
-                position: "absolute",
-                opacity: 0,
-                width: "100%",
-                height: "100%",
-                cursor: restoring ? "not-allowed" : "pointer",
-                left: 0,
-                top: 0,
-              }}
+              style={styles.hiddenInput}
               disabled={restoring || downloading}
             />
+
             <button
               style={styles.restoreBtn}
               disabled={restoring || downloading}
@@ -142,11 +139,11 @@ const AdminPage = () => {
               ) : (
                 <Upload size={18} />
               )}
-              <span>{restoring ? "Restoring..." : "Restore"}</span>
+              {restoring ? "Restoring..." : "Restore"}
             </button>
           </div>
 
-          {/* 3. LOGOUT BUTTON */}
+          {/* LOGOUT */}
           <button onClick={() => dispatch(logout())} style={styles.logoutBtn}>
             <LogOut size={18} /> Logout
           </button>
@@ -176,7 +173,6 @@ const AdminPage = () => {
         </button>
       </div>
 
-      {/* CONTENT AREA */}
       <div style={styles.contentArea}>
         {activeTab === "catalog" ? <AdminCatalogPage /> : <MyOrdersPage />}
       </div>
@@ -184,36 +180,44 @@ const AdminPage = () => {
   );
 };
 
-// --- STYLES ---
+// ----------------------
+// STYLES
+// ----------------------
 const styles = {
   dashboardWrapper: {
     minHeight: "100vh",
-    backgroundColor: "#f3f4f6",
+    background: "#f3f4f6",
     display: "flex",
     flexDirection: "column",
   },
+
   topBar: {
-    background: "#ffffff",
+    background: "#fff",
     padding: "20px 40px",
-    borderBottom: "1px solid #e5e7eb",
+    borderBottom: "1px solid #ddd",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    position: "sticky",
-    top: 0,
-    zIndex: 50,
   },
-  heading: { margin: 0, fontSize: "24px", color: "#111827", fontWeight: "800" },
-  subHeading: { margin: "4px 0 0 0", fontSize: "14px", color: "#6b7280" },
+
+  heading: { margin: 0, fontSize: "24px", fontWeight: "800" },
+  subHeading: { margin: 0, color: "#666" },
+
+  hiddenInput: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    opacity: 0,
+    cursor: "pointer",
+  },
 
   logoutBtn: {
     padding: "10px 20px",
     background: "#fee2e2",
-    color: "#991b1b",
-    border: "1px solid #fca5a5",
+    color: "#b91c1c",
     borderRadius: "8px",
+    border: "1px solid #fca5a5",
     cursor: "pointer",
-    fontWeight: "600",
     display: "flex",
     alignItems: "center",
     gap: "8px",
@@ -223,76 +227,75 @@ const styles = {
     padding: "10px 20px",
     background: "#ecfdf5",
     color: "#047857",
-    border: "1px solid #6ee7b7",
     borderRadius: "8px",
+    border: "1px solid #6ee7b7",
     cursor: "pointer",
-    fontWeight: "600",
     display: "flex",
     alignItems: "center",
     gap: "8px",
-    transition: "all 0.2s",
   },
 
   restoreBtn: {
     padding: "10px 20px",
     background: "#fff7ed",
     color: "#c2410c",
-    border: "1px solid #fdba74",
     borderRadius: "8px",
+    border: "1px solid #fdba74",
     cursor: "pointer",
-    fontWeight: "600",
     display: "flex",
     alignItems: "center",
     gap: "8px",
-    transition: "all 0.2s",
-    height: "100%",
   },
 
   tabContainer: {
-    padding: "20px 40px 0",
     display: "flex",
-    gap: "16px",
-    background: "#ffffff",
-    borderBottom: "1px solid #e5e7eb",
+    gap: "15px",
+    padding: "20px 40px",
+    background: "#fff",
   },
+
   tabBtn: {
     padding: "12px 24px",
     background: "transparent",
-    color: "#6b7280",
     border: "none",
     borderBottom: "3px solid transparent",
     cursor: "pointer",
-    fontWeight: "600",
-    fontSize: "15px",
+    color: "#666",
     display: "flex",
     alignItems: "center",
-    gap: "10px",
+    gap: "8px",
+    fontWeight: "600",
   },
-  activeTab: { color: "#2563eb", borderBottom: "3px solid #2563eb" },
-  contentArea: { flex: 1, padding: "20px" },
+
+  activeTab: {
+    color: "#2563eb",
+    borderBottom: "3px solid #2563eb",
+  },
+
+  contentArea: {
+    flex: 1,
+    // padding: "20px",
+  },
+
   deniedContainer: {
     height: "100vh",
     display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
     justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
     gap: "20px",
-    backgroundColor: "#fef2f2",
-    color: "#991b1b",
   },
+
   loginBtn: {
     padding: "12px 24px",
     background: "#2563eb",
-    color: "white",
-    border: "none",
+    color: "#fff",
     borderRadius: "8px",
     cursor: "pointer",
-    fontWeight: "600",
-    fontSize: "16px",
   },
 };
 
-// Add spin animation dynamically if missing
+// Animation
 const styleSheet = document.createElement("style");
 styleSheet.innerText = `
   .spin { animation: spin 1s linear infinite; }

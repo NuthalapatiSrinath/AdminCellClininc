@@ -3,106 +3,131 @@ import JSZip from "jszip";
 import { saveAs } from "file-saver";
 
 export const backupService = {
-  // --- 1. DOWNLOAD BACKUP (Your existing working logic) ---
+  // ----------------------------
+  // 1. DOWNLOAD BACKUP (FIXED)
+  // ----------------------------
   downloadFullBackup: async () => {
-    try {
-      console.log("⏳ Fetching data from server...");
-      // 1. Get the raw data
-      const response = await apiClient.get("/backup/download");
-      const fullData = response.data || response;
+    console.log("====================================");
+    console.log("🟦 BACKUP STARTED: Calling /backup/download");
+    console.log("====================================");
 
-      if (!fullData || !fullData.data) {
-        throw new Error("No data received");
+    try {
+      // apiClient ALREADY returns pure JSON body
+      const fullBackup = await apiClient.get("/backup/download");
+      console.log("✅ Received response from backend:", fullBackup);
+
+      if (!fullBackup || !fullBackup.data) {
+        console.error("❌ Missing .data in backend response");
+        throw new Error("Invalid backup format: No data in response");
       }
 
-      console.log("📦 Processing images and creating ZIP...");
-      const zip = new JSZip();
+      const data = fullBackup.data;
 
-      // Create a folder for images inside the zip
+      console.log("📦 Backup contains:", {
+        brands: data.brands?.length,
+        devices: data.devices?.length,
+        services: data.services?.length,
+        inquiries: data.inquiries?.length,
+      });
+
+      console.log("🟧 Creating ZIP...");
+      const zip = new JSZip();
       const imgFolder = zip.folder("images");
 
-      // Helper to process a list (Brands/Devices) and extract images
+      // SAFE IMAGE PROCESSOR
       const processList = (list, prefix) => {
-        if (!list) return [];
-        return list.map((item) => {
-          // If item has an image and it's a Base64 string
-          if (item.image && item.image.startsWith("data:image")) {
-            try {
-              // 1. Get extension (png/jpeg)
+        if (!list) {
+          console.warn(`⚠ ${prefix} list missing`);
+          return [];
+        }
+
+        return list.map((item, index) => {
+          let rawName =
+            item.name ||
+            item.title ||
+            item.model ||
+            item.brandName ||
+            `item_${index}`;
+
+          try {
+            if (item.image && item.image.startsWith("data:image")) {
               const matches = item.image.match(
                 /^data:image\/([a-zA-Z]+);base64,(.+)$/
               );
-              if (matches) {
-                const ext = matches[1];
-                const base64Data = matches[2];
-                // Clean filename
-                const safeName = (item.name || "unknown").replace(
-                  /[^a-z0-9]/gi,
-                  "_"
-                );
-                const filename = `${prefix}_${safeName}.${ext}`;
 
-                // 2. Add real file to ZIP folder
-                imgFolder.file(filename, base64Data, { base64: true });
+              if (!matches) return item;
 
-                // 3. Update the JSON data to point to this file
-                return { ...item, image: `images/${filename}` };
-              }
-            } catch (err) {
-              console.warn("Failed to convert image:", item.name);
+              const ext = matches[1];
+              const base64Data = matches[2];
+              const safeName = String(rawName).replace(/[^a-z0-9]/gi, "_");
+              const filename = `${prefix}_${safeName}.${ext}`;
+
+              imgFolder.file(filename, base64Data, { base64: true });
+
+              return { ...item, image: `images/${filename}` };
             }
+          } catch (err) {
+            console.error(`❌ Error processing ${prefix} #${index}`, err);
           }
-          // If it's already a link or empty, leave it
+
           return item;
         });
       };
 
-      // Process Collections
-      const cleanBrands = processList(fullData.data.brands, "brand");
-      const cleanDevices = processList(fullData.data.devices, "device");
+      // CLEAN LISTS
+      const cleanBrands = processList(data.brands, "brand");
+      const cleanDevices = processList(data.devices, "device");
 
-      // Reconstruct the clean database object
+      // FINAL JSON FOR ZIP
       const cleanDB = {
-        ...fullData,
+        ...fullBackup,
         data: {
-          ...fullData.data,
+          ...data,
           brands: cleanBrands,
           devices: cleanDevices,
         },
       };
 
-      // Add the clean JSON to zip
+      console.log("🟪 Adding database.json to ZIP...");
       zip.file("database.json", JSON.stringify(cleanDB, null, 2));
 
-      // Generate the ZIP file
-      const content = await zip.generateAsync({ type: "blob" });
+      console.log("⏳ Generating ZIP...");
+      const blob = await zip.generateAsync({ type: "blob" });
 
-      // Save it
       const date = new Date().toISOString().split("T")[0];
-      saveAs(content, `CellClinic_Backup_${date}.zip`);
+      const fileName = `CellClinic_Backup_${date}.zip`;
 
+      console.log("💾 Saving ZIP:", fileName);
+      saveAs(blob, fileName);
+
+      console.log("🎉 BACKUP COMPLETED");
       return { success: true };
     } catch (error) {
-      console.error("Backup failed:", error);
+      console.error("\n====================================");
+      console.error("❌ BACKUP FAILED");
+      console.error(error);
+      console.error("====================================\n");
+
       return { success: false, message: error.message };
     }
   },
 
-  // --- 2. RESTORE BACKUP (The New Part) ---
+  // ----------------------------
+  // 2. RESTORE BACKUP
+  // ----------------------------
   uploadRestoreFile: async (file) => {
     try {
       const formData = new FormData();
       formData.append("file", file);
 
-      // Timeout increased for large restores (60s)
-      const response = await apiClient.post("/backup/restore", formData, {
+      const res = await apiClient.post("/backup/restore", formData, {
         headers: { "Content-Type": "multipart/form-data" },
-        timeout: 60000,
+        timeout: 90000,
       });
 
-      return response.data || response;
+      return res;
     } catch (error) {
-      console.error("Restore failed:", error);
+      console.error("❌ Restore Failed:", error);
       throw error;
     }
   },
