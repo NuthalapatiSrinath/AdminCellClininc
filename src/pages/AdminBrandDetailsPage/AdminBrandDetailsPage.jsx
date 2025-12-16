@@ -14,9 +14,14 @@ import {
   FileSpreadsheet,
   CheckCircle,
   AlertCircle,
+  Download,
 } from "lucide-react";
 import styles from "./AdminBrandDetailsPage.module.css";
 import { catalogService } from "../../services/catalogService";
+import {
+  downloadBrandReport,
+  downloadBrandEditable,
+} from "../../services/backupService";
 import * as XLSX from "xlsx";
 import Loader from "../../components/Loader/Loader";
 
@@ -82,6 +87,27 @@ const AdminBrandDetailsPage = () => {
       navigate("/admin");
     } catch (e) {
       alert("Delete failed");
+    }
+  };
+
+  // --- NEW EXPORT ACTIONS ---
+  const handleExportBrandReport = async () => {
+    try {
+      setStatus({ message: "Downloading Report...", type: "info" });
+      await downloadBrandReport(id);
+      setStatus({ message: "Report Downloaded Successfully", type: "success" });
+    } catch (err) {
+      setStatus({ message: "Failed to download report", type: "error" });
+    }
+  };
+
+  const handleExportBrandEditable = async () => {
+    try {
+      setStatus({ message: "Downloading Editable Sheet...", type: "info" });
+      await downloadBrandEditable(id);
+      setStatus({ message: "Editable Sheet Downloaded", type: "success" });
+    } catch (err) {
+      setStatus({ message: "Failed to download sheet", type: "error" });
     }
   };
 
@@ -162,7 +188,7 @@ const AdminBrandDetailsPage = () => {
     }
   };
 
-  // --- TEMPLATE DOWNLOAD (Clean, No Brand Columns) ---
+  // --- TEMPLATE DOWNLOAD ---
   const downloadTemplate = () => {
     const headers = [
       {
@@ -174,8 +200,8 @@ const AdminBrandDetailsPage = () => {
         Service_Price: "15000, 3000",
       },
       {
-        Device_Name: "Galaxy S23", // Example of Fill Down
-        Device_Image: "", // Leave blank to reuse or add new
+        Device_Name: "Galaxy S23",
+        Device_Image: "",
         Device_Type: "",
         Service_Title: "Charging Port",
         Service_Desc: "Fix charging issues",
@@ -200,9 +226,42 @@ const AdminBrandDetailsPage = () => {
           <button onClick={() => navigate("/admin")} className={styles.backBtn}>
             <ArrowLeft size={20} /> Back to Catalog
           </button>
-          <button className={styles.deleteBrandBtn} onClick={handleDeleteBrand}>
-            <Trash2 size={16} /> Delete Brand
-          </button>
+
+          {/* ACTIONS */}
+          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+            <button
+              className={styles.secondaryBtn}
+              onClick={handleExportBrandReport}
+              title="Download Read-Only Report"
+              style={{
+                backgroundColor: "#eef2ff",
+                color: "#4f46e5",
+                border: "1px solid #c7d2fe",
+              }}
+            >
+              <FileSpreadsheet size={16} /> Brand Report
+            </button>
+
+            <button
+              className={styles.secondaryBtn}
+              onClick={handleExportBrandEditable}
+              title="Download Editable Excel for Re-Import"
+              style={{
+                backgroundColor: "#f0fdf4",
+                color: "#16a34a",
+                border: "1px solid #bbf7d0",
+              }}
+            >
+              <Download size={16} /> Export to Edit
+            </button>
+
+            <button
+              className={styles.deleteBrandBtn}
+              onClick={handleDeleteBrand}
+            >
+              <Trash2 size={16} /> Delete Brand
+            </button>
+          </div>
         </div>
 
         {/* Status Notification */}
@@ -226,9 +285,11 @@ const AdminBrandDetailsPage = () => {
               src={brand.image}
               alt={brand.name}
               className={styles.brandLogo}
-              onError={(e) =>
-                (e.target.src = "https://via.placeholder.com/100")
-              }
+              // --- FIXED IMAGE ERROR HANDLER ---
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "/logo192.png";
+              }}
             />
             <div>
               <h1>{brand.name}</h1>
@@ -258,7 +319,7 @@ const AdminBrandDetailsPage = () => {
               <button
                 className={styles.secondaryBtn}
                 onClick={downloadTemplate}
-                title="Download Excel Template for this Brand"
+                title="Download Blank Template"
               >
                 <FileSpreadsheet size={16} /> Template
               </button>
@@ -306,10 +367,11 @@ const AdminBrandDetailsPage = () => {
                     src={device.image}
                     alt={device.name}
                     className={styles.deviceImg}
-                    onError={(e) =>
-                      (e.target.src =
-                        "https://via.placeholder.com/150?text=No+Img")
-                    }
+                    // --- FIXED IMAGE ERROR HANDLER ---
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/logo192.png";
+                    }}
                   />
                   <h3>{device.name}</h3>
                   <p>{device.type}</p>

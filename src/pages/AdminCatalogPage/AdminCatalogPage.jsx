@@ -52,8 +52,6 @@ const AdminCatalogPage = () => {
     );
   };
 
-  // --- HANDLERS ---
-
   const handleManageBrand = (brandId) => {
     if (brandId) {
       navigate(`/admin/brand/${brandId}`);
@@ -77,7 +75,6 @@ const AdminCatalogPage = () => {
     }
   };
 
-  // Modals
   const openBrandModal = () => {
     dispatch(
       openModal({
@@ -135,12 +132,8 @@ const AdminCatalogPage = () => {
     }
   };
 
-  // --- UPDATED TEMPLATE GENERATOR ---
   const downloadTemplate = () => {
-    // We create data that demonstrates BOTH scenarios
     const templateData = [
-      // --- SCENARIO A: Fill Down (Standard / Vertical) ---
-      // Row 1: Define Brand + Device + 1st Service
       {
         Brand_Name: "Samsung",
         Brand_Image: "https://example.com/samsung.png",
@@ -154,53 +147,14 @@ const AdminCatalogPage = () => {
         Service_Desc: "Original AMOLED",
         Service_Price: 15000,
       },
-      // Row 2: Leave Brand/Device blank (Backend will use "Samsung/Galaxy S24" from above)
       {
         Brand_Name: "",
-        Brand_Image: "",
-        Brand_Title: "",
-        Brand_Hero_Text: "",
-        Brand_Hero_Desc: "",
         Device_Name: "",
-        Device_Image: "",
-        Device_Type: "",
         Service_Title: "Battery Replacement",
         Service_Desc: "Original Battery",
         Service_Price: 3000,
       },
-      // Row 3: Still same device
-      {
-        Brand_Name: "",
-        Brand_Image: "",
-        Brand_Title: "",
-        Brand_Hero_Text: "",
-        Brand_Hero_Desc: "",
-        Device_Name: "",
-        Device_Image: "",
-        Device_Type: "",
-        Service_Title: "Charging Port",
-        Service_Desc: "Fix charging issues",
-        Service_Price: 1200,
-      },
-
-      // --- SCENARIO B: Comma Separated (Horizontal / Fast) ---
-      // Row 4: New Brand (Apple) + New Device + MULTIPLE Services in one cell
-      {
-        Brand_Name: "Apple",
-        Brand_Image: "https://example.com/apple.png",
-        Brand_Title: "Apple Repair",
-        Brand_Hero_Text: "IPHONE EXPERTS",
-        Brand_Hero_Desc: "We fix all iPhones.",
-        Device_Name: "iPhone 15",
-        Device_Image: "https://example.com/i15.png",
-        Device_Type: "mobile",
-        // Notice the commas below:
-        Service_Title: "Screen Repair, Battery Replacement, Back Glass",
-        Service_Desc: "Original OLED, High Capacity, Laser fix",
-        Service_Price: "28000, 5000, 4000",
-      },
     ];
-
     const ws = XLSX.utils.json_to_sheet(templateData);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Master_Template");
@@ -234,7 +188,6 @@ const AdminCatalogPage = () => {
               </h2>
               <p>Create individual items with instant updates.</p>
             </div>
-
             <div className={styles.btnGroup}>
               <button className={styles.actionBtn} onClick={openBrandModal}>
                 <div className={styles.iconBox}>
@@ -242,14 +195,12 @@ const AdminCatalogPage = () => {
                 </div>
                 <span>Add Brand</span>
               </button>
-
               <button className={styles.actionBtn} onClick={openDeviceModal}>
                 <div className={styles.iconBox}>
                   <Smartphone size={20} />
                 </div>
                 <span>Add Device</span>
               </button>
-
               <button className={styles.actionBtn} onClick={openServiceModal}>
                 <div className={styles.iconBox}>
                   <Wrench size={20} />
@@ -295,6 +246,7 @@ const AdminCatalogPage = () => {
               </div>
 
               <div className={styles.uploadActions}>
+                {/* Export Button REMOVED */}
                 <button
                   className={styles.downloadBtn}
                   onClick={downloadTemplate}
@@ -322,7 +274,6 @@ const AdminCatalogPage = () => {
         {/* --- MANAGE BRANDS SECTION --- */}
         <div className={styles.brandsSection}>
           <h3>Manage Existing Brands ({brands.length})</h3>
-
           {brands.length === 0 ? (
             <p className={styles.emptyText}>
               No brands found. Add one manually or upload Excel.
@@ -335,12 +286,12 @@ const AdminCatalogPage = () => {
                     src={brand.image}
                     alt={brand.name}
                     className={styles.brandLogo}
-                    onError={(e) =>
-                      (e.target.src =
-                        "https://via.placeholder.com/100?text=No+Img")
-                    }
+                    // --- FIXED IMAGE ERROR HANDLER ---
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/logo192.png";
+                    }}
                   />
-
                   <div className={styles.brandInfo}>
                     <h4>{brand.name}</h4>
                     <div className={styles.cardActions}>

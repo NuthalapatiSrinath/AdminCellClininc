@@ -23,9 +23,18 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// --- Response Interceptor (Error Handling) ---
+// --- Response Interceptor (Error Handling & File Download Fix) ---
 apiClient.interceptors.response.use(
-  (response) => response.data, // Return only data, skip the wrapper
+  (response) => {
+    // FIX: If the request is for a file download (blob), return the full response.
+    // This allows the frontend to read headers like "content-disposition" for the filename.
+    if (response.config.responseType === "blob") {
+      return response;
+    }
+
+    // Otherwise, return only the data (standard behavior)
+    return response.data;
+  },
   (error) => {
     const message = error.response?.data?.message || "Something went wrong";
     return Promise.reject(message);
