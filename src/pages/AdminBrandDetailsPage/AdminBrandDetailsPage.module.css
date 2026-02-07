@@ -227,11 +227,19 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, border 0.2s, background-color 0.2s;
+  position: relative;
 }
 .deviceCard:hover {
   transform: translateY(-2px);
   box-shadow: var(--Shadow_Md);
+}
+
+.deviceCard.selected {
+  border: 2px solid #4f46e5;
+  background-color: #eef2ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
 }
 
 .deviceImg {

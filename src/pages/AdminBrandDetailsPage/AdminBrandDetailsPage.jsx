@@ -37,6 +37,10 @@ const AdminBrandDetailsPage = () => {
   // Upload States
   const [uploading, setUploading] = useState(false);
   const [status, setStatus] = useState({ message: "", type: "" });
+  
+  // Multi-select States
+  const [selectedDevices, setSelectedDevices] = useState([]);
+  const [selectMode, setSelectMode] = useState(false);
 
   useEffect(() => {
     if (id) fetchData();
@@ -59,7 +63,11 @@ const AdminBrandDetailsPage = () => {
 
       // 2. Get Devices
       const devicesRes = await catalogService.getDevices(id);
-      setDevices(devicesRes.data || []);
+      const devicesData = devicesRes.data || [];
+      
+      // Backend returns devices sorted by _id descending (newest first)
+      // This preserves Excel upload order: newest batch at top, correct row order within batch
+      setDevices(devicesData);
     } catch (err) {
       console.error(err);
       setStatus({ message: "Failed to load data", type: "error" });
@@ -140,8 +148,103 @@ const AdminBrandDetailsPage = () => {
 
   const handleDeleteDevice = async (deviceId) => {
     if (!window.confirm("Delete this device?")) return;
-    await catalogService.deleteDevice(deviceId);
-    fetchData();
+    try {
+      await catalogService.deleteDevice(deviceId);
+      fetchData();
+      setStatus({ message: "Device deleted successfully", type: "success" });
+    } catch (err) {
+      setStatus({ message: "Failed to delete device", type: "error" });
+    }
+  };
+
+  // Delete All Devices
+  const handleDeleteAllDevices = async () => {
+    if (devices.length === 0) {
+      alert("No devices to delete");
+      return;
+    }
+    
+    if (!window.confirm(`Delete ALL ${devices.length} devices from ${brand.name}? This cannot be undone!`)) {
+      return;
+    }
+    
+    setLoading(true);
+    setStatus({ message: "Deleting all devices...", type: "info" });
+    
+    try {
+      const deletePromises = devices.map(device => 
+        catalogService.deleteDevice(device._id)
+      );
+      await Promise.all(deletePromises);
+      
+      setStatus({ message: "All devices deleted successfully", type: "success" });
+      fetchData();
+    } catch (err) {
+      console.error(err);
+      setStatus({ message: "Some devices failed to delete", type: "error" });
+      fetchData();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Toggle Select Mode
+  const toggleSelectMode = () => {
+    setSelectMode(!selectMode);
+    setSelectedDevices([]);
+  };
+
+  // Toggle Device Selection
+  const toggleDeviceSelection = (deviceId) => {
+    setSelectedDevices(prev => {
+      if (prev.includes(deviceId)) {
+        return prev.filter(id => id !== deviceId);
+      } else {
+        return [...prev, deviceId];
+      }
+    });
+  };
+
+  // Select All Devices
+  const selectAllDevices = () => {
+    if (selectedDevices.length === devices.length) {
+      setSelectedDevices([]);
+    } else {
+      setSelectedDevices(devices.map(d => d._id));
+    }
+  };
+
+  // Delete Selected Devices
+  const handleDeleteSelected = async () => {
+    if (selectedDevices.length === 0) {
+      alert("No devices selected");
+      return;
+    }
+    
+    if (!window.confirm(`Delete ${selectedDevices.length} selected device(s)? This cannot be undone!`)) {
+      return;
+    }
+    
+    setLoading(true);
+    setStatus({ message: `Deleting ${selectedDevices.length} device(s)...`, type: "info" });
+    
+    try {
+      const deletePromises = selectedDevices.map(deviceId => 
+        catalogService.deleteDevice(deviceId)
+      );
+      await Promise.all(deletePromises);
+      
+      setStatus({ message: `${selectedDevices.length} device(s) deleted successfully`, type: "success" });
+      setSelectedDevices([]);
+      setSelectMode(false);
+      fetchData();
+    } catch (err) {
+      console.error(err);
+      setStatus({ message: "Some devices failed to delete", type: "error" });
+      fetchData();
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleManageServices = (device) => {
@@ -312,45 +415,108 @@ const AdminBrandDetailsPage = () => {
               <h2>
                 <Smartphone size={20} /> Devices ({devices.length})
               </h2>
+              {selectMode && selectedDevices.length > 0 && (
+                <span style={{ color: "#4f46e5", fontSize: "14px", fontWeight: "500" }}>
+                  ({selectedDevices.length} selected)
+                </span>
+              )}
             </div>
 
             {/* ACTION GROUP: Upload & Add */}
             <div className={styles.actionGroup}>
-              <button
-                className={styles.secondaryBtn}
-                onClick={downloadTemplate}
-                title="Download Blank Template"
-              >
-                <FileSpreadsheet size={16} /> Template
-              </button>
+              {!selectMode ? (
+                <>
+                  <button
+                    className={styles.secondaryBtn}
+                    onClick={downloadTemplate}
+                    title="Download Blank Template"
+                  >
+                    <FileSpreadsheet size={16} /> Template
+                  </button>
 
-              <div className={styles.uploadWrapper}>
-                <input
-                  type="file"
-                  accept=".xlsx, .xls"
-                  id="brand-upload"
-                  className={styles.hiddenInput}
-                  onChange={handleFileUpload}
-                  disabled={uploading}
-                />
-                <label
-                  htmlFor="brand-upload"
-                  className={`${styles.secondaryBtn} ${
-                    uploading ? styles.disabled : ""
-                  }`}
-                >
-                  {uploading ? (
-                    <Loader2 size={16} className={styles.spin} />
-                  ) : (
-                    <UploadCloud size={16} />
+                  <div className={styles.uploadWrapper}>
+                    <input
+                      type="file"
+                      accept=".xlsx, .xls"
+                      id="brand-upload"
+                      className={styles.hiddenInput}
+                      onChange={handleFileUpload}
+                      disabled={uploading}
+                    />
+                    <label
+                      htmlFor="brand-upload"
+                      className={`${styles.secondaryBtn} ${
+                        uploading ? styles.disabled : ""
+                      }`}
+                    >
+                      {uploading ? (
+                        <Loader2 size={16} className={styles.spin} />
+                      ) : (
+                        <UploadCloud size={16} />
+                      )}
+                      <span>Import Excel</span>
+                    </label>
+                  </div>
+
+                  <button className={styles.addDeviceBtn} onClick={handleAddDevice}>
+                    <Plus size={16} /> Add Device
+                  </button>
+                  
+                  {devices.length > 0 && (
+                    <>
+                      <button
+                        className={styles.secondaryBtn}
+                        onClick={toggleSelectMode}
+                        style={{
+                          backgroundColor: "#fff7ed",
+                          color: "#ea580c",
+                          border: "1px solid #fed7aa",
+                        }}
+                      >
+                        Select
+                      </button>
+                      <button
+                        className={styles.deleteBrandBtn}
+                        onClick={handleDeleteAllDevices}
+                        title="Delete All Devices"
+                      >
+                        <Trash2 size={16} /> Delete All
+                      </button>
+                    </>
                   )}
-                  <span>Import Excel</span>
-                </label>
-              </div>
-
-              <button className={styles.addDeviceBtn} onClick={handleAddDevice}>
-                <Plus size={16} /> Add Device
-              </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    className={styles.secondaryBtn}
+                    onClick={selectAllDevices}
+                    style={{
+                      backgroundColor: selectedDevices.length === devices.length ? "#dcfce7" : "#f3f4f6",
+                      color: selectedDevices.length === devices.length ? "#16a34a" : "#374151",
+                      border: selectedDevices.length === devices.length ? "1px solid #86efac" : "1px solid #d1d5db",
+                    }}
+                  >
+                    {selectedDevices.length === devices.length ? "Deselect All" : "Select All"}
+                  </button>
+                  <button
+                    className={styles.deleteBrandBtn}
+                    onClick={handleDeleteSelected}
+                    disabled={selectedDevices.length === 0}
+                    style={{
+                      opacity: selectedDevices.length === 0 ? 0.5 : 1,
+                      cursor: selectedDevices.length === 0 ? "not-allowed" : "pointer",
+                    }}
+                  >
+                    <Trash2 size={16} /> Delete Selected ({selectedDevices.length})
+                  </button>
+                  <button
+                    className={styles.secondaryBtn}
+                    onClick={toggleSelectMode}
+                  >
+                    Cancel
+                  </button>
+                </>
+              )}
             </div>
           </div>
 
@@ -362,7 +528,42 @@ const AdminBrandDetailsPage = () => {
           ) : (
             <div className={styles.deviceGrid}>
               {devices.map((device) => (
-                <div key={device._id} className={styles.deviceCard}>
+                <div 
+                  key={device._id} 
+                  className={`${styles.deviceCard} ${
+                    selectMode && selectedDevices.includes(device._id) ? styles.selected : ""
+                  }`}
+                  onClick={() => selectMode && toggleDeviceSelection(device._id)}
+                  style={{
+                    cursor: selectMode ? "pointer" : "default",
+                    border: selectMode && selectedDevices.includes(device._id) 
+                      ? "2px solid #4f46e5" 
+                      : undefined,
+                    backgroundColor: selectMode && selectedDevices.includes(device._id)
+                      ? "#eef2ff"
+                      : undefined,
+                  }}
+                >
+                  {selectMode && (
+                    <div style={{
+                      position: "absolute",
+                      top: "10px",
+                      left: "10px",
+                      zIndex: 10,
+                    }}>
+                      <input
+                        type="checkbox"
+                        checked={selectedDevices.includes(device._id)}
+                        onChange={() => toggleDeviceSelection(device._id)}
+                        style={{
+                          width: "20px",
+                          height: "20px",
+                          cursor: "pointer",
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    </div>
+                  )}
                   <img
                     src={device.image}
                     alt={device.name}
@@ -376,28 +577,30 @@ const AdminBrandDetailsPage = () => {
                   <h3>{device.name}</h3>
                   <p>{device.type}</p>
 
-                  <div className={styles.deviceActions}>
-                    <button
-                      onClick={() => handleEditDevice(device)}
-                      title="Edit"
-                    >
-                      <Edit size={14} />
-                    </button>
-                    <button
-                      onClick={() => handleManageServices(device)}
-                      className={styles.servicesBtn}
-                      title="Services"
-                    >
-                      <Layers size={14} /> Services
-                    </button>
-                    <button
-                      onClick={() => handleDeleteDevice(device._id)}
-                      className={styles.deleteBtn}
-                      title="Delete"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
+                  {!selectMode && (
+                    <div className={styles.deviceActions}>
+                      <button
+                        onClick={() => handleEditDevice(device)}
+                        title="Edit"
+                      >
+                        <Edit size={14} />
+                      </button>
+                      <button
+                        onClick={() => handleManageServices(device)}
+                        className={styles.servicesBtn}
+                        title="Services"
+                      >
+                        <Layers size={14} /> Services
+                      </button>
+                      <button
+                        onClick={() => handleDeleteDevice(device._id)}
+                        className={styles.deleteBtn}
+                        title="Delete"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

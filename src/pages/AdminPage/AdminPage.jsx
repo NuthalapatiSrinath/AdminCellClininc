@@ -32,7 +32,9 @@ const AdminPage = () => {
     }
   }, [isAuthenticated, dispatch]);
 
-  // --- BACKUP (Full JSON) ---
+  // ---------------------------
+  // 1. BACKUP (Full JSON)
+  // ---------------------------
   const handleDownloadBackup = async () => {
     if (!window.confirm("Download full backup (Images + Data)?")) return;
 
@@ -46,7 +48,9 @@ const AdminPage = () => {
     }
   };
 
-  // --- RESTORE (JSON) ---
+  // ---------------------------
+  // 2. RESTORE (JSON)
+  // ---------------------------
   const handleRestore = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -76,6 +80,9 @@ const AdminPage = () => {
     }
   };
 
+  // ---------------------------
+  // AUTH CHECK
+  // ---------------------------
   if (!isAuthenticated) {
     return (
       <div style={styles.deniedContainer}>
@@ -92,6 +99,9 @@ const AdminPage = () => {
     );
   }
 
+  // ---------------------------
+  // UI
+  // ---------------------------
   return (
     <div style={styles.dashboardWrapper}>
       {/* TOP BAR */}
@@ -102,9 +112,9 @@ const AdminPage = () => {
         </div>
 
         <div style={{ display: "flex", gap: "12px" }}>
-          {/* Export Button Removed */}
+          {/* Export Button Removed from here as well */}
 
-          {/* BACKUP BUTTON */}
+          {/* --- BACKUP BUTTON --- */}
           <button
             onClick={handleDownloadBackup}
             style={styles.backupBtn}
@@ -118,7 +128,7 @@ const AdminPage = () => {
             Backup
           </button>
 
-          {/* RESTORE BUTTON */}
+          {/* --- RESTORE BUTTON --- */}
           <div style={{ position: "relative" }}>
             <input
               type="file"
@@ -141,7 +151,7 @@ const AdminPage = () => {
             </button>
           </div>
 
-          {/* LOGOUT BUTTON */}
+          {/* --- LOGOUT BUTTON --- */}
           <button onClick={() => dispatch(logout())} style={styles.logoutBtn}>
             <LogOut size={18} /> Logout
           </button>
@@ -171,6 +181,7 @@ const AdminPage = () => {
         </button>
       </div>
 
+      {/* CONTENT AREA */}
       <div style={styles.contentArea}>
         {activeTab === "catalog" ? <AdminCatalogPage /> : <MyOrdersPage />}
       </div>
@@ -178,7 +189,9 @@ const AdminPage = () => {
   );
 };
 
-// ... Styles remain the same ...
+// ----------------------
+// STYLES
+// ----------------------
 const styles = {
   dashboardWrapper: {
     minHeight: "100vh",
@@ -186,6 +199,7 @@ const styles = {
     display: "flex",
     flexDirection: "column",
   },
+
   topBar: {
     background: "#fff",
     padding: "20px 40px",
@@ -194,8 +208,10 @@ const styles = {
     justifyContent: "space-between",
     alignItems: "center",
   },
+
   heading: { margin: 0, fontSize: "24px", fontWeight: "800" },
   subHeading: { margin: 0, color: "#666" },
+
   hiddenInput: {
     position: "absolute",
     width: "100%",
@@ -203,6 +219,7 @@ const styles = {
     opacity: 0,
     cursor: "pointer",
   },
+
   logoutBtn: {
     padding: "10px 20px",
     background: "#fee2e2",
@@ -214,6 +231,7 @@ const styles = {
     alignItems: "center",
     gap: "8px",
   },
+
   backupBtn: {
     padding: "10px 20px",
     background: "#ecfdf5",
@@ -225,6 +243,7 @@ const styles = {
     alignItems: "center",
     gap: "8px",
   },
+
   restoreBtn: {
     padding: "10px 20px",
     background: "#fff7ed",
@@ -236,12 +255,14 @@ const styles = {
     alignItems: "center",
     gap: "8px",
   },
+
   tabContainer: {
     display: "flex",
     gap: "15px",
     padding: "20px 40px",
     background: "#fff",
   },
+
   tabBtn: {
     padding: "12px 24px",
     background: "transparent",
@@ -254,13 +275,16 @@ const styles = {
     gap: "8px",
     fontWeight: "600",
   },
+
   activeTab: {
     color: "#2563eb",
     borderBottom: "3px solid #2563eb",
   },
+
   contentArea: {
     flex: 1,
   },
+
   deniedContainer: {
     height: "100vh",
     display: "flex",
@@ -269,6 +293,7 @@ const styles = {
     flexDirection: "column",
     gap: "20px",
   },
+
   loginBtn: {
     padding: "12px 24px",
     background: "#2563eb",
@@ -278,6 +303,7 @@ const styles = {
   },
 };
 
+// Animation injection
 const styleSheet = document.createElement("style");
 styleSheet.innerText = `
   .spin { animation: spin 1s linear infinite; }

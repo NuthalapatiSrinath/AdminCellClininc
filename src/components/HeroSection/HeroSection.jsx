@@ -2,11 +2,17 @@ import React, { useState, useEffect, useRef } from "react";
 import styles from "./HeroSection.module.css";
 
 const HeroSection = () => {
-  // Define your two sets of images
-  const desktopImages = ["/images/hero/1.webp", "/images/hero/2.webp"];
+  const desktopImages = [
+    "/images/hero/1.webp",
+    "/images/hero/2.webp",
+    "/images/hero/5.webp",
+  ];
 
-  const mobileImages = ["/images/hero/3.webp", "/images/hero/4.webp"];
-
+  const mobileImages = [
+    "/images/hero/3.webp",
+    "/images/hero/4.webp",
+    "/images/hero/6.webp",
+  ];
   // State to track if we are on mobile
   const [isMobile, setIsMobile] = useState(false);
 
