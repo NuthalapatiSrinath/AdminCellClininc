@@ -213,8 +213,8 @@ const ContactUsPage = () => {
               <div className={styles.infoText}>
                 <h3>Head Office Address:</h3>
                 <p>
-                  Plot 5 to 8, Sector 5, Main Address, Madhapur, Hyderabad,
-                  Telangana 408701
+                  Plot No 5 to 8, Sector 5, Haripuri Colony, Madhapur, Hyderabad,
+                  Telangana 500081
                 </p>
               </div>
             </div>
@@ -225,9 +225,17 @@ const ContactUsPage = () => {
               </div>
               <div className={styles.infoText}>
                 <h3>Email</h3>
-                <a href="mailto:support@cellclinichyd.com">
-                  support@cellclinichyderabad.com
-                </a>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0px' }}>
+                  <a href="mailto:support@cellclinichyd.com" style={{ lineHeight: '1.5' }}>
+                    support@cellclinichyd.com
+                  </a>
+                  <a href="mailto:bookings@cellclinichyd.com" style={{ lineHeight: '1.5' }}>
+                    bookings@cellclinichyd.com
+                  </a>
+                  <a href="mailto:info@cellclinichyd.com" style={{ lineHeight: '1.5' }}>
+                    info@cellclinichyd.com
+                  </a>
+                </div>
               </div>
             </div>
 

@@ -10,6 +10,17 @@ export const catalogService = {
   getServices: async (deviceId) =>
     await apiClient.get(`/catalog/services/${deviceId}`),
 
+  // --- SEARCH CATALOG (Brands & Devices) ---
+  search: async (query) => {
+    try {
+      const response = await apiClient.get(`/catalog/search?query=${query}`);
+      return response;
+    } catch (error) {
+      console.error("Error searching catalog:", error);
+      return { success: false, data: [] };
+    }
+  },
+
   // --- BRAND WRITE ---
   createBrand: async (formData) =>
     await apiClient.post("/catalog/brand", formData, multipartConfig),

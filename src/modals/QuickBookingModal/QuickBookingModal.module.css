@@ -90,6 +90,25 @@
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
+.inputGroup textarea {
+  width: 100%;
+  padding: 12px 12px 12px 40px; /* Space for icon */
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  background: #f9fafb;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.inputGroup textarea:focus {
+  border-color: #2563eb;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
 .submitBtn {
   margin-top: 8px;
   background: #2563eb;

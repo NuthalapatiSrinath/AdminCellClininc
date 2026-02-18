@@ -4,9 +4,10 @@ import { useSelector, useDispatch } from "react-redux";
 // Removed toggleTheme import
 import { openModal } from "../../redux/slices/modalSlice";
 import { logout } from "../../redux/slices/authSlice";
+import { Search } from "lucide-react"; // Added Search icon
 import {
   MapPin,
-  Mail,
+  PhoneCall,
   CalendarDays,
   Menu,
   X,
@@ -14,8 +15,10 @@ import {
   LogOut,
   Package,
   ChevronDown,
-} from "lucide-react"; // Removed Sun, Moon
+} from "lucide-react"; // Removed Sun, Moon, Mail; Added PhoneCall
 import styles from "./TopBar.module.css";
+import { catalogService } from "../../services/catalogService";
+import { getImageUrl } from "../../utils/imageHelper";
 
 const TopBar = () => {
   const dispatch = useDispatch();
@@ -29,6 +32,11 @@ const TopBar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isMobileSearchVisible, setIsMobileSearchVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [showSearchDropdown, setShowSearchDropdown] = useState(false);
+  const searchRef = useRef(null);
 
   const profileRef = useRef(null);
 
@@ -50,6 +58,42 @@ const TopBar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Handle Search using backend API
+  useEffect(() => {
+    const performSearch = async () => {
+      if (searchQuery.trim() === "") {
+        setSearchResults([]);
+        setShowSearchDropdown(false);
+        return;
+      }
+
+      try {
+        const response = await catalogService.search(searchQuery);
+        if (response && response.success) {
+          setSearchResults(response.data);
+          setShowSearchDropdown(response.data.length > 0);
+        }
+      } catch (error) {
+        console.error("Search error:", error);
+      }
+    };
+
+    const debounce = setTimeout(performSearch, 300);
+    return () => clearTimeout(debounce);
+  }, [searchQuery]);
+
+  // Handle click outside to close search dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowSearchDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const handleLogout = () => {
     dispatch(logout());
     setIsProfileOpen(false);
@@ -63,6 +107,25 @@ const TopBar = () => {
   // Helper to check active state
   const isActive = (path) => location.pathname === path;
 
+  // --- SEARCH HANDLERS ---
+  const handleSearchResultClick = (result) => {
+    // Fill the search bar with the complete name
+    setSearchQuery(result.fullName || result.name);
+
+    if (result.type === "brand") {
+      navigate(`/repair-brand/${result.name.toLowerCase()}`);
+    } else {
+      // For specific device models, navigate to the model repair page
+      // We pass the full object in state as ModelRepairPage expects it
+      navigate(`/repair/model/${result.id}`, { state: { model: result } });
+    }
+    setShowSearchDropdown(false);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
   return (
     <>
       {/* --- Top Strip --- */}
@@ -71,24 +134,30 @@ const TopBar = () => {
           <div className={styles.stripContent}>
             <div className={styles.locationPill}>
               <MapPin size={14} className={styles.icon} />
-              <span>Bengaluru | Hyderabad | Mumbai</span>
+              <span>Hyderabad</span>
             </div>
 
             <div className={styles.rightStripGroup}>
               <div className={styles.emailGroup}>
-                <a
-                  href="mailto:info@cellclinichyd.com"
-                  className={styles.contactLink}
-                >
-                  <Mail size={14} />
-                  <span>info@cellclinichyd.com</span>
+                <a href="tel:+919346532339" className={styles.contactLink}>
+                  <PhoneCall size={14} />
+                  <span>+91 93465 32339</span>
                 </a>
               </div>
 
               {/* UPDATED: Now opens Modal instead of navigating */}
               <button
                 className={styles.bookNowBtnSmall}
-                onClick={() => dispatch(openModal({ type: "QUICK_BOOKING" }))}
+                onClick={() => {
+                  // Scroll to brands section (images section)
+                  const brandsSection = document.getElementById('brands-section');
+                  if (brandsSection) {
+                    brandsSection.scrollIntoView({ behavior: 'smooth' });
+                  } else {
+                    // Fallback to opening modal if brands section not found
+                    dispatch(openModal({ type: "QUICK_BOOKING" }));
+                  }
+                }}
               >
                 <CalendarDays size={14} />
                 <span>Book Now</span>
@@ -143,11 +212,65 @@ const TopBar = () => {
               >
                 Contact
               </Link>
+
+              {/* Search Bar */}
+              <div className={`${styles.searchContainer} ${styles.hideOnMobile}`} ref={searchRef}>
+                <div className={styles.searchInputWrapper}>
+                  <Search size={18} className={styles.searchIcon} />
+                  <input
+                    type="text"
+                    placeholder="Search devices..."
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    onFocus={() => searchQuery && setShowSearchDropdown(true)}
+                    className={styles.searchInput}
+                  />
+                </div>
+
+                {/* Search Dropdown */}
+                {showSearchDropdown && searchResults.length > 0 && (
+                  <div className={styles.searchDropdown}>
+                    {searchResults.map((result, index) => (
+                      <div
+                        key={index}
+                        className={styles.searchResultItem}
+                        onClick={() => handleSearchResultClick(result)}
+                      >
+                        <img
+                          src={getImageUrl(result.image)}
+                          alt={result.name}
+                          className={styles.searchResultImage}
+                          onError={(e) => (e.target.src = "/logo.webp")}
+                        />
+                        <div className={styles.searchResultInfo}>
+                          <div className={styles.searchResultName}>
+                            {result.fullName || result.name}
+                          </div>
+                          <div className={styles.searchResultType}>
+                            {result.type === "brand"
+                              ? "Brand"
+                              : result.brandName}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </nav>
 
             {/* Actions */}
             <div className={styles.actions}>
               {/* REMOVED THEME TOGGLE BUTTON HERE */}
+
+              {/* Mobile Search Toggle */}
+              <button
+                className={styles.mobileSearchToggle}
+                onClick={() => setIsMobileSearchVisible(!isMobileSearchVisible)}
+                aria-label="Toggle Search"
+              >
+                {isMobileSearchVisible ? <X size={20} /> : <Search size={22} />}
+              </button>
 
               {/* --- AUTH BUTTON SECTION --- */}
               {isAuthenticated ? (
@@ -202,6 +325,54 @@ const TopBar = () => {
             </div>
           </div>
         </div>
+
+        {/* Expanded Mobile Search Row */}
+        {isMobileSearchVisible && (
+          <div className={styles.mobileSearchRow} ref={searchRef}>
+            <div className={styles.mobileSearchHeaderInput}>
+              <input
+                type="text"
+                placeholder="Search for your device..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+                className={styles.mobileSearchHeaderText}
+                autoFocus
+              />
+              <button className={styles.mobileSearchActionBtn}>
+                <Search size={20} color="white" />
+              </button>
+            </div>
+
+            {/* Mobile Dropdown Results */}
+            {showSearchDropdown && searchResults.length > 0 && (
+              <div className={styles.searchDropdownMobile}>
+                {searchResults.map((result, index) => (
+                  <div
+                    key={index}
+                    className={styles.searchResultItem}
+                    onClick={() => {
+                      handleSearchResultClick(result);
+                      setIsMobileSearchVisible(false);
+                    }}
+                  >
+                    <img
+                      src={getImageUrl(result.image)}
+                      alt={result.name}
+                      className={styles.searchResultImage}
+                      onError={(e) => (e.target.src = "/logo.webp")}
+                    />
+                    <div className={styles.searchResultInfo}>
+                      <div className={styles.searchResultName}>{result.fullName || result.name}</div>
+                      <div className={styles.searchResultType}>
+                        {result.type === "brand" ? "Brand" : result.brandName}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* --- Mobile Menu --- */}
         <div

@@ -143,7 +143,7 @@ const BrandsSection = () => {
   }, [fetchBrands, location.key]);
 
   return (
-    <section className={styles.section}>
+    <section className={styles.section} id="brands-section">
       <div className={styles.container}>
         <motion.h2
           className={styles.title}

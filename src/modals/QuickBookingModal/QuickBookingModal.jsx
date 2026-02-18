@@ -13,6 +13,7 @@ const QuickBookingModal = ({ close }) => {
     mobile: "",
     deviceType: "Mobile", // Default
     location: "",
+    issueDescription: "",
   });
 
   const handleChange = (e) => {
@@ -31,7 +32,7 @@ const QuickBookingModal = ({ close }) => {
         mobile: formData.mobile,
         // We use a placeholder email since your backend requires it, but the user didn't input it
         email: "callback_request@cellclinic.com",
-        description: `🚀 CALLBACK REQUEST \n\n📍 Location: ${formData.location}\n📱 Device Type: ${formData.deviceType}\n\nPlease call this customer back immediately.`,
+        description: `🚀 CALLBACK REQUEST \n\n📍 Location: ${formData.location}\n📱 Device Type: ${formData.deviceType}\n📝 Issue: ${formData.issueDescription}\n\nPlease call this customer back immediately.`,
       };
 
       await contactService.submitContactForm(payload);
@@ -139,7 +140,19 @@ const QuickBookingModal = ({ close }) => {
             onChange={handleChange}
           />
         </div>
-
+      
+        {/* Issue Description */}
+        <div className={styles.inputGroup}>
+          <textarea
+            name="issueDescription"
+            placeholder="Describe the issue with your device..."
+            value={formData.issueDescription}
+            onChange={handleChange}
+            className={styles.textareaInput}
+            rows="3"
+          ></textarea>
+        </div>
+      
         <button type="submit" className={styles.submitBtn} disabled={loading}>
           {loading ? <Loader2 className={styles.spin} /> : "Get a Call Now"}
         </button>

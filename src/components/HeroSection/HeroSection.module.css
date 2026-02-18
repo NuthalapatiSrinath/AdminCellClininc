@@ -11,6 +11,48 @@
   line-height: 0;
 }
 
+/* --- Floating Button Overlay --- */
+.btnOverlay {
+  position: absolute;
+  bottom: 10%;
+  /* Adjust as per preference */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  pointer-events: none;
+  /* Let clicks pass through to button only */
+}
+
+.bookNowBtn {
+  pointer-events: auto;
+  background-color: #f97316;
+  /* Brand orange or any premium color */
+  color: white;
+  border: none;
+  padding: 12px 32px;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.bookNowBtn:hover {
+  background-color: #ea580c;
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 768px) {
+  .bookNowBtn {
+    padding: 10px 24px;
+    font-size: 15px;
+    bottom: 15%;
+  }
+}
+
 /* 2. Slider Track */
 .sliderTrack {
   display: flex;

@@ -117,11 +117,14 @@ const Footer = () => {
             <h3 className={styles.heading}>Contact Us</h3>
             <div className={styles.contactItem}>
               <MapPin className={styles.icon} size={20} />
-              <span>Hyderabad, Telangana, India</span>
+              <span>
+                Plot No 5 to 8, Sector 5, Haripuri Colony, Madhapur, Hyderabad,
+                Telangana 500081
+              </span>
             </div>
             <div className={styles.contactItem}>
               <Phone className={styles.icon} size={20} />
-              <a href="tel:+918884827842">+91-88848 27842</a>
+              <a href="tel:+919346532339">+91 93465 32339</a>
             </div>
             <div className={styles.contactItem}>
               <Mail className={styles.icon} size={20} />
